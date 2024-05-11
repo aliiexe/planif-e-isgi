@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('codeGroupePR');
             $table->decimal('MHRD', 2, 2);
 
-            $table->unique(['idSemaine', 'idJour', 'idSalle', 'idSeance', 'matricule', 'idModule', 'codeGroupePR'], 'unique_affecter_realjour_d_s');
-
+            $table->unique(['idSemaine', 'idJour', 'idSalle', 'idSeance', 'matricule', 'idModule', 'codeGroupePR'], 'unique_affecter_realjour_p_r');
+            
             $table->foreign('idJour')->references('id')->on('jours');
             $table->foreign('matricule')->references('matricule')->on('formateurs');
             $table->foreign('idSeance')->references('ordreSeance')->on('seances');
