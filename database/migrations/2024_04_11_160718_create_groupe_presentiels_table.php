@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('libelleGroupePR');
             $table->string('groupeCodeOptionFiliere');
             $table->foreignId('option_filieres_id')->constrained('option_filieres')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

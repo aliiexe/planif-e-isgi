@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('idSemestre')->constrained('semestres')->onDelete('cascade');
             $table->string('semaineAnneeFormation', 9);
             $table->foreign('semaineAnneeFormation')->references('anneeFormation')->on('annee_formations');
+            $table->timestamps();
         });
     }
 

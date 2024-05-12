@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('anneeFormation', 9)->primary();
             $table->date('dateDebutAnneeFormation');
             $table->date('dateFinAnneeFormation');
+            $table->timestamps();
         });
     }
 

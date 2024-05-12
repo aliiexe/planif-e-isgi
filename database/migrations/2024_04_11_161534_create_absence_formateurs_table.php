@@ -20,8 +20,7 @@ return new class extends Migration
             $table->foreign('idJustificationAFM')->references('id')->on('justification_abs_f_r_m_s');
             $table->foreign('idAffectJrSnPr')->references('id')->on('affecter_realjour_p_r');
             $table->foreign('idAffectJrSnDs')->references('id')->on('affecter_realjour_d_s');
-
-
+            $table->timestamps();
         });
     }
 

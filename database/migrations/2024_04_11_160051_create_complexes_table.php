@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('complexes', function (Blueprint $table) {
             $table->id();
             $table->string('nomComplexe', 50);
+            $table->timestamps();
         });
     }
 

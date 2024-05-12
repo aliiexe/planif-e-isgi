@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('TypeConge');
             $table->string('MotifConge');
+            $table->timestamps();
         });
     }
 

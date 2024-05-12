@@ -26,6 +26,7 @@ return new class extends Migration
             $table->foreign('idModule')->references('id')->on('modules');
             $table->foreign('semaineAnneeFormation')->references('anneeFormation')->on('annee_formations');
             $table->foreign('idGroupePhysique')->references('id')->on('groupe_physique');
+            $table->timestamps();
         });
     }
 

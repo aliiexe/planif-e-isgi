@@ -1,8 +1,8 @@
+import { Link } from 'react-router-dom';
 import './Sidebar.css';
 
 export default function Sidebar() {
   return (
-    <div className="container">
       <aside className="sidebar">
         <div className="top">
           <div className="loogo">
@@ -19,13 +19,13 @@ export default function Sidebar() {
               </svg>
                 Tableau de bord
               </a>
-              <a href="#" className="menu-item">
+              <Link to="/formateurs" className="menu-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-video3 icon" viewBox="0 0 16 16">
                 <path d="M14 9.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0m-6 5.7c0 .8.8.8.8.8h6.4s.8 0 .8-.8-.8-3.2-4-3.2-4 2.4-4 3.2"/>
                 <path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h5.243c.122-.326.295-.668.526-1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v7.81c.353.23.656.496.91.783Q16 12.312 16 12V4a2 2 0 0 0-2-2z"/>
               </svg>
                 Formateur
-              </a>
+              </Link>
               <a href="#" className="menu-item">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-people-fill icon" viewBox="0 0 16 16">
                 <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
@@ -87,11 +87,12 @@ export default function Sidebar() {
               <span className="username">User test</span>
             </div>
             <a href="#" className="logout">
-              {/* SVG code */}
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="logout-icon">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+              </svg>
             </a>
           </div>
         </div>
       </aside>
-    </div>
   )
 }

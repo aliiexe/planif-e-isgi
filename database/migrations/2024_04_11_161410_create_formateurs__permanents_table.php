@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('formateurs__permanents', function (Blueprint $table) {
             $table->id();
-            $table->date('dateRecrutement');
-            $table->date('DateDepartRetraite');
+            $table->date('Date_Recrutement');
+            $table->date('Date_Depart_Retrait');
             $table->integer('Echelle');
             $table->string('Echelon');
             $table->string('Grade');
             $table->string('matriculeFm');
             $table->foreign('matriculeFm')->references('matricule')->on('formateurs');
+            $table->timestamps();
         });
     }
 

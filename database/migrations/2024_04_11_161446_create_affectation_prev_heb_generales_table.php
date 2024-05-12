@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign('idGroupePhysique')->references('id')->on('groupe_physique');
             $table->foreign('idAffecHebPDs')->references('id')->on('affecter_heb_p_dis');
             $table->foreign('idAffecHebPPr')->references('id')->on('affecter_heb_d_prs');
+            $table->timestamps();
         });
     }
 

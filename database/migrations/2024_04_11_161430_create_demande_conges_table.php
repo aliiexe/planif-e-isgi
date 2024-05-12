@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->foreign('idFMPR')->references('id')->on('formateurs__permanents');
             $table->foreign('idTypeConge')->references('id')->on('type_conges');
+            $table->timestamps();
             $table->foreign('matriculePA')->references('matricule')->on('personnel__administratifs');
         });
     }

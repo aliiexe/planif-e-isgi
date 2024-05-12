@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('libelleSanction');
             $table->decimal('Point', 2, 2);
+            $table->timestamps();
         });
     }
 

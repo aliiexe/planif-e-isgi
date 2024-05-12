@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('MasseHoraireProposee');
             $table->boolean('Dossier_Depose_DR');
             $table->string('matriculeFm');
+            $table->timestamps();
             $table->foreign('matriculeFm')->references('matricule')->on('formateurs');
         });
     }

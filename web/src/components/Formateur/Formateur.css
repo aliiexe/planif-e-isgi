@@ -1,0 +1,101 @@
+.main {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    height: fit-content;
+  }
+  
+  .form {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  
+  .maindiv {
+    margin-top: 0.25rem;
+  }
+  
+  .maindiv {
+     @media (min-width: 768px) {
+        grid-column: span 2 / span 2;
+      }
+  }
+  
+  .maindiv2-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .maindiv2 {
+    box-sizing: border-box;
+    margin-top: 0.25rem;
+  }
+  
+  @media (min-width: 768px) {
+    .maindiv2-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .formInput{
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.375rem;
+    border: 2px solid #E5E7EB;
+    width: 100%;
+    margin-top: 5px;
+    font-family: poppins;
+    font-weight: 400;
+    font-size: medium;
+  }
+  
+  .formInput-mat{
+    width: 100%;
+    font-family: poppins;
+    font-weight: 400;
+    font-size: medium;
+  }
+  
+  .label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .add-button {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #004B93;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    font-weight: 700;
+    background-color: #004B93;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .add-button:hover {
+    background-color: #0059ac;
+    width: 100%;
+  }
+  
+  .mainCheckbox {
+    display: flex;
+    align-items: center;
+  }
+

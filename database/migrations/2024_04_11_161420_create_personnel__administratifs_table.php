@@ -35,6 +35,7 @@ return new class extends Migration
             $table->foreign('idEtablissement')->references('id')->on('etablissements');
             $table->string('Role');
             $table->string('reliquat');
+            $table->timestamps();
         });
     }
 

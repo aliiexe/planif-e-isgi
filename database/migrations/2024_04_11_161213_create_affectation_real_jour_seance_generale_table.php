@@ -16,6 +16,7 @@ class CreateAffectationRealJourSeanceGeneraleTable extends Migration
             $table->decimal('CumuleTotaleJour_dist_pre', 10, 2);
             $table->unsignedBigInteger('idGroupePhysique');
             $table->foreign('idGroupePhysique')->references('id')->on('groupe_physique');
+            $table->timestamps();
         });
     }
 

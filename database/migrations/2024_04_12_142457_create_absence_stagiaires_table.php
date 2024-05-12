@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('idJustificationSTG')->references('id')->on('justification_abs_s_t_g_s');
             $table->foreign('idAffectJrSnPr')->references('id')->on('affecter_realjour_p_r');
             $table->foreign('idAffectJrSnDs')->references('id')->on('affecter_realjour_d_s');
+            $table->foreign('idJustification')->references('id')->on('justification_abs_f_r_m_s');
 
         });
     }
