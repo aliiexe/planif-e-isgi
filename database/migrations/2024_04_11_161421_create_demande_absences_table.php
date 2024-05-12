@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('matriculePA');
             $table->foreign('matriculeFm')->references('matricule')->on('formateurs');
             $table->foreign('matriculePA')->references('matricule')->on('personnel__administratifs');
+            $table->timestamps();
         });
     }
 

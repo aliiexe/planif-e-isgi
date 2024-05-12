@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('nbrSanctions');
             $table->unsignedBigInteger('idGroupePhysique');
             $table->foreign('idGroupePhysique')->references('id')->on('groupe_physique');
+            $table->timestamps();
         });
     }
 

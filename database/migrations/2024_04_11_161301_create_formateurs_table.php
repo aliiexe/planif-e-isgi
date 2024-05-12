@@ -30,11 +30,12 @@ class CreateFormateursTable extends Migration
             $table->string('Diplome');
             $table->string('situationFamiliale');
             $table->decimal('MasseHoaraireHeb', 8, 2);
-            $table->decimal('massHorRealiseeAnnuel', 8, 2);
+            $table->decimal('massHorRealiseeAnnuel', 8, 2)->nullable();
             $table->string('Filiere', 50);
             $table->string('Categorie', 50);
             $table->unsignedBigInteger('idEtablissement');
             $table->foreign('idEtablissement')->references('id')->on('etablissements');
+            $table->timestamps();
         });
     }
 

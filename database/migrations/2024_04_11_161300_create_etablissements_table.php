@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('Adresse');
             $table->unsignedBigInteger('idComplexe');
             $table->foreign('idComplexe')->references('id')->on('complexes');
+            $table->timestamps();
         });
     }
 

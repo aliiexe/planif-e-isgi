@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('seances', function (Blueprint $table) {
             $table->integer('ordreSeance')->unsigned()->primary();
+            $table->timestamps();
         });
     }
 

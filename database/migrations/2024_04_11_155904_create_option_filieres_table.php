@@ -18,12 +18,13 @@ return new class extends Migration
             $table->string('libelleOptionFiliere');
             $table->enum('annee',['1A','2A','3A']);
             $table->string('codeFiliere');
-
+            $table->timestamps();
             $table->foreign('codeFiliere')
                 ->references('codeFiliere')
                 ->on('filieres')
                 ->onDelete('cascade');
         });
+        
     }
 
     /**

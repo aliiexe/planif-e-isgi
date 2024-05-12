@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('justification_abs_s_t_g_s', function (Blueprint $table) {
             $table->id();
             $table->string('motifJustification');
+            $table->timestamps();
         });
     }
 

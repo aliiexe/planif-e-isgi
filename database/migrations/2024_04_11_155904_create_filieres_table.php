@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('filieres', function (Blueprint $table) {
             $table->string('codeFiliere')->primary();
             $table->string('libelleFiliere');
+            $table->timestamps();
         });
     }
 

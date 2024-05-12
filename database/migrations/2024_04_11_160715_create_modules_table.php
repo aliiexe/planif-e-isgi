@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignId('option_filieres_id')->constrained('option_filieres')->onDelete('cascade');
 
             $table->string('semestreModule', 2);
+            $table->timestamps();
         });
     }
 

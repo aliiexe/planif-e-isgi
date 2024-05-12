@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->boolean('is_feriee');
             $table->foreignId('idSemestre')->constrained('semestres')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

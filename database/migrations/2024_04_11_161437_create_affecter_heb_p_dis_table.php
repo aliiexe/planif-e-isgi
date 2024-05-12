@@ -26,6 +26,7 @@ return new class extends Migration
             $table->foreign('idModule')->references('id')->on('modules');
             $table->foreign('codeGroupeDS')->references('codeGroupeDS')->on('groupe_distanciels');
             $table->foreign('idSemaine')->references('id')->on('semaines');
+            $table->timestamps();
         });
     }
 
