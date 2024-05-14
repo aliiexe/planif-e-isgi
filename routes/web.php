@@ -10,4 +10,6 @@ Route::get('/', function () {
 
 
 use App\Http\Controllers\FormateurController;
+use App\Http\Controllers\GroupePhysiqueController;
 Route::post('/formateurs', [FormateurController::class, 'store']);
+Route::resource('groupe',GroupePhysiqueController::class);
