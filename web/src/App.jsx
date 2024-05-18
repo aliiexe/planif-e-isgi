@@ -1,3 +1,4 @@
+
 import './App.css'
 import Formateur from './components/Formateur/Formateur';
 import Sidebar from './components/SideBar/Sidebar'
@@ -6,6 +7,10 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import Groupe from './components/Groupe/Groupe';
+import Filiere from './components/Filiere/Filiere';
+import OptionFiliere from './components/Filiere/OptionFiliere';
+import Module from './components/Module/Module';
+
 
 
 function App() {
@@ -18,6 +23,9 @@ function App() {
           <Routes>
             <Route path="/formateurs" element={<Formateur />} />
             <Route path='/groupes' element={<Groupe/>}></Route>
+            <Route path='/filieres' element={<Filiere/>}></Route>
+            <Route path='/optionfilieres' element={<OptionFiliere/>}></Route>
+            <Route path='/modules' element={<Module/>}></Route>
           </Routes>
         </div>
       </div>
