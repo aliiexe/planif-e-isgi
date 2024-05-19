@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Formateur extends Model
 {
-    use HasFactory;
+    use HasFactory;    
+    protected $primaryKey = 'matricule';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'matricule',

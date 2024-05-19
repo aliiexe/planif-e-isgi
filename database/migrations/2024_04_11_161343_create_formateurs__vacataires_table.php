@@ -30,7 +30,7 @@ return new class extends Migration
             $table->boolean('Dossier_Depose_DR');
             $table->string('matriculeFm');
             $table->timestamps();
-            $table->foreign('matriculeFm')->references('matricule')->on('formateurs');
+            $table->foreign('matriculeFm')->references('matricule')->on('formateurs')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

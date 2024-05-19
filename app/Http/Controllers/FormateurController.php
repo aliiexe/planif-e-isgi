@@ -13,8 +13,7 @@ class FormateurController extends Controller
      */
     public function index()
     {
-        $formateurs = Formateur::all();
-        return view('formateurs.index', compact('formateurs'));
+        return response()->json(Formateur::all());
     }
 
     /**
@@ -65,7 +64,7 @@ class FormateurController extends Controller
 
         return response()->json(['message' => 'Formateur created successfully', 'formateur' => $formateur], 201);
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -88,14 +87,28 @@ class FormateurController extends Controller
      */
     public function update(Request $request, Formateur $formateur)
     {
-        //
+        $formateur = Formateur::where('matricule', $request->matricule)->first();
+
+        if ($formateur) {
+            $formateur->update($request->all());
+            return response()->json(['message' => 'Formateur updated successfully', 'formateur' => $formateur], 200);
+        } else {
+            return response()->json(['message' => 'Formateur not found'], 404);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Formateur $formateur)
+    public function destroy($matricule)
     {
-        //
+        $formateur = Formateur::where('matricule', $matricule)->first();
+
+        if ($formateur) {
+            $formateur->delete();
+            return response()->json(['message' => 'Formateur deleted successfully'], 200);
+        } else {
+            return response()->json(['message' => 'Formateur not found'], 404);
+        }
     }
 }
