@@ -38,8 +38,17 @@ export default function OptionFiliere() {
       const response = await axiosClient.post('/option-filieres', formData);
       console.log(response);
       fetchOptions(); // Rafraîchir la liste des options après l'ajout
+      toast.current.show({ severity: 'success', summary: 'Succès', detail: 'L\'option filière est ajoutée avec succès' });
+      setVisible(false);
+      setFormData({
+        codeOptionFiliere: '',
+        libelleOptionFiliere: '',
+        annee: '',
+        codeFiliere: ''
+      });
     } catch (error) {
       console.error(error);
+      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de l\'ajout de l\'option filière' });
     }
   };
 
@@ -51,6 +60,7 @@ export default function OptionFiliere() {
       toast.current.show({ severity: 'success', summary: 'Succès', detail: 'L\'option filière est mise à jour avec succès' });
     } catch (error) {
       console.error(error);
+      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de la mise à jour de l\'option filière' });
     }
   };
 
@@ -62,6 +72,7 @@ export default function OptionFiliere() {
       toast.current.show({ severity: 'success', summary: 'Succès', detail: 'L\'option filière a été supprimée avec succès' });
     } catch (error) {
       console.error(error);
+      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de la suppression de l\'option filière' });
     }
   };
 
@@ -106,14 +117,14 @@ export default function OptionFiliere() {
             <div className="maindiv2">
               <label htmlFor="annee" className="label">Année</label>
               <select id="annee" name="annee" value={formData.annee} onChange={handleChange} className="formInput">
-  <option value="">Sélectionner une année</option>
-  <option value="1A">1A</option>
-  <option value="2A">2A</option>
-  <option value="3A">3A</option>
-</select>
+                <option value="">Sélectionner une année</option>
+                <option value="1A">1A</option>
+                <option value="2A">2A</option>
+                <option value="3A">3A</option>
+              </select>
             </div>
             <div className="maindiv2">
-              <label htmlFor="codeFiliere" className="label">libelle Filière</label>
+              <label htmlFor="codeFiliere" className="label">Libellé Filière</label>
               <select id="codeFiliere" name="codeFiliere" value={formData.codeFiliere} onChange={handleChange} className="formInput">
                 <option value="">Sélectionner une filière</option>
                 {filieres.map((filiere) => (
@@ -121,7 +132,7 @@ export default function OptionFiliere() {
                 ))}
               </select>
             </div>
-            <button type="submit" onClick={show} className="add-button">Ajouter</button>
+            <button type="submit" className="add-button">Ajouter</button>
           </form>
         </Dialog>
         <Toast ref={toast} />
@@ -147,14 +158,15 @@ export default function OptionFiliere() {
               </div>
               <div className="maindiv2">
                 <label htmlFor="annee" className="label">Année</label>
-                <select id="annee" name="annee" value={formData.annee} onChange={handleChange} className="formInput">
-  <option value="">Sélectionner une année</option>
-  <option value="1A">1A</option>
-  <option value="2A">2A</option>
-  <option value="3A">3A</option>
-</select>              </div>
+                <select id="annee" name="annee" value={selectedOption.annee} onChange={(e) => setSelectedOption({ ...selectedOption, annee: e.target.value })} className="formInput">
+                  <option value="">Sélectionner une année</option>
+                  <option value="1A">1A</option>
+                  <option value="2A">2A</option>
+                  <option value="3A">3A</option>
+                </select>
+              </div>
               <div className="maindiv2">
-                <label htmlFor="codeFiliere" className="label">libelle Filière</label>
+                <label htmlFor="codeFiliere" className="label">Libellé Filière</label>
                 <select id="codeFiliere" name="codeFiliere" value={selectedOption.codeFiliere} onChange={(e) => setSelectedOption({ ...selectedOption, codeFiliere: e.target.value })} className="formInput">
                   <option value="">Sélectionner une filière</option>
                   {filieres.map((filiere) => (
@@ -170,4 +182,3 @@ export default function OptionFiliere() {
     </>
   );
 }
-

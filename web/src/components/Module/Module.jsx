@@ -30,9 +30,10 @@ export default function Module() {
   };
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     });
   };
 
@@ -40,14 +41,19 @@ export default function Module() {
     e.preventDefault();
     if (!formData.codeModule || !formData.libelleModule || !formData.ordreModule || !formData.MHT || !formData.Coef || !formData.option_filieres_id || !formData.semestreModule) {
       console.error('Tous les champs doivent être remplis');
+      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Tous les champs doivent être remplis' });
       return;
     }
 
-    // Vérifier si la case "EFM Regional" est cochée et définir la valeur en conséquence
-    const efmRegionalValue = document.getElementById("EFM_Regional").checked;
+    const validSemestres = ["S1", "S2", "S3", "S4", "S5"];
+    if (!validSemestres.includes(formData.semestreModule)) {
+      console.error('Semestre module invalide');
+      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Semestre module invalide' });
+      return;
+    }
 
     try {
-      const response = await axiosClient.post('/modules', { ...formData, EFM_Regional: efmRegionalValue });
+      const response = await axiosClient.post('/modules', formData);
       console.log(response);
       fetchModules();
       toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Le module est ajouté avec succès' });
@@ -61,6 +67,7 @@ export default function Module() {
         option_filieres_id: '',
         semestreModule: ''
       });
+      setVisible(false);
     } catch (error) {
       console.error(error);
       toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de l\'ajout du module' });
@@ -72,9 +79,10 @@ export default function Module() {
       const response = await axiosClient.put(`/modules/${selectedOption.id}`, selectedOption);
       console.log(response);
       fetchModules();
-      toast.current.show({ severity: 'success', summary: 'Succès', detail: 'L\'option filière est mise à jour avec succès' });
+      toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Le module est mis à jour avec succès' });
     } catch (error) {
       console.error(error);
+      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de la mise à jour du module' });
     }
   };
 
@@ -83,9 +91,10 @@ export default function Module() {
       const response = await axiosClient.delete(`/modules/${id}`);
       console.log(response);
       fetchModules();
-      toast.current.show({ severity: 'success', summary: 'Succès', detail: 'L\'option filière a été supprimée avec succès' });
+      toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Le module a été supprimé avec succès' });
     } catch (error) {
       console.error(error);
+      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de la suppression du module' });
     }
   };
 
@@ -172,9 +181,11 @@ export default function Module() {
               <label htmlFor="semestreModule" className="label">Semestre Module</label>
               <select id="semestreModule" name="semestreModule" value={formData.semestreModule} onChange={handleChange} className="formInput">
                 <option value="">Sélectionner un semestre</option>
-                <option value="1A">1A</option>
-                <option value="2A">2A</option>
-                <option value="3A">3A</option>
+                <option value="S1">S1</option>
+                <option value="S2">S2</option>
+                <option value="S3">S3</option>
+                <option value="S4">S4</option>
+                <option value="S5">S5</option>
               </select>
             </div>
             <button type="submit" className="add-button">Ajouter</button>
@@ -195,7 +206,6 @@ export default function Module() {
             <Column field="EFM_Regional" header="EFM Regional"></Column>
             <Column field="option_filieres_id" header="Option Filieres ID"></Column>
             <Column field="semestreModule" header="Semestre Module"></Column>
-
             <Column body={(rowData) => <Button icon="pi pi-trash" onClick={() => handleDelete(rowData.id)} />} style={{ width: '8em', textAlign: 'center' }} />
           </DataTable>
           {selectedOption && (
@@ -241,9 +251,11 @@ export default function Module() {
                 <label htmlFor="semestreModule" className="label">Semestre Module</label>
                 <select id="semestreModule" name="semestreModule" value={selectedOption.semestreModule} onChange={(e) => setSelectedOption({ ...selectedOption, semestreModule: e.target.value })} className="formInput">
                   <option value="">Sélectionner un semestre</option>
-                  <option value="1A">1A</option>
-                  <option value="2A">2A</option>
-                  <option value="3A">3A</option>
+                  <option value="S1">S1</option>
+                  <option value="S2">S2</option>
+                  <option value="S3">S3</option>
+                  <option value="S4">S4</option>
+                  <option value="S5">S5</option>
                 </select>
               </div>
               <button type="button" onClick={handleUpdate} className="add-button">Modifier</button>
@@ -254,5 +266,3 @@ export default function Module() {
     </>
   );
 }
-
-
