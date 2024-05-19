@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('affecter_heb_d_prs', function (Blueprint $table) {
             $table->id();
-            $table->UnsignedBigInteger('idSemaine');
-            $table->string('matricule');
-            $table->UnsignedBigInteger('idModule');
-            $table->string('codeGroupePR');
+            $table->unsignedBigInteger('idSemaine');
+            $table->string('matricule', 100); // Limitez la longueur si possible
+            $table->unsignedBigInteger('idModule');
+            $table->string('codeGroupePR', 50); // Limitez la longueur si possible
             $table->decimal('MHHP', 3, 2);
             $table->decimal('CumuleHeurePre', 10, 2);
 
+            // Utilisez un index partiel si nécessaire
             $table->unique(['idSemaine', 'matricule', 'idModule', 'codeGroupePR'], 'unique_affecter_heb_d_prs');
 
             $table->foreign('matricule')->references('matricule')->on('formateurs');
