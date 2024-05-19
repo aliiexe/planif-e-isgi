@@ -11,5 +11,7 @@ Route::get('/', function () {
 
 use App\Http\Controllers\FormateurController;
 use App\Http\Controllers\GroupePhysiqueController;
-Route::post('/formateurs', [FormateurController::class, 'store']);
+use App\Http\Controllers\EtablissementController;
+Route::resource('etablissement',EtablissementController::class);
 Route::resource('groupe',GroupePhysiqueController::class);
+Route::resource('formateur',FormateurController::class);

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('Echelon');
             $table->string('Grade');
             $table->string('matriculeFm');
-            $table->foreign('matriculeFm')->references('matricule')->on('formateurs');
+            $table->foreign('matriculeFm')->references('matricule')->on('formateurs')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
