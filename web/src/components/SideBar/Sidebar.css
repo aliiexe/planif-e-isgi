@@ -98,3 +98,7 @@
     justify-content: center;
     margin-right: 10px;
   }
+
+  .menu-item.active {
+    color: #FFFFFF;
+  }
