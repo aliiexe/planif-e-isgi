@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -13,17 +14,16 @@ return new class extends Migration
     {
         Schema::create('affecter_realjour_d_s', function (Blueprint $table) {
             $table->id();
-            $table->UnsignedBigInteger('idSemaine');
-            $table->UnsignedBigInteger('idJour');
-            $table->UnsignedBigInteger('idSalle');
-            $table->UnsignedInteger('idSeance');
-            $table->string('matricule');
-            $table->UnsignedBigInteger('idModule');
-            $table->string('codeGroupeDS');
+            $table->unsignedBigInteger('idSemaine');
+            $table->unsignedBigInteger('idJour');
+            $table->unsignedBigInteger('idSalle');
+            $table->unsignedInteger('idSeance');
+            $table->string('matricule', 100); // Limitez la longueur si possible
+            $table->unsignedBigInteger('idModule');
+            $table->string('codeGroupeDS', 50); // Limitez la longueur si possible
             $table->decimal('MHRD', 2, 2);
 
-            $table->unique(['idSemaine', 'idJour', 'idSalle', 'idSeance', 'matricule', 'idModule', 'codeGroupeDS'], 'unique_affecter_realjour_d_s');
-
+            // Définir les clés étrangères
             $table->foreign('idJour')->references('id')->on('jours');
             $table->foreign('matricule')->references('matricule')->on('formateurs');
             $table->foreign('idSeance')->references('ordreSeance')->on('seances');
@@ -33,6 +33,9 @@ return new class extends Migration
             $table->foreign('idSemaine')->references('id')->on('semaines');
             $table->timestamps();
         });
+
+        // Ajouter l'index unique avec des longueurs de préfixe
+        DB::statement('ALTER TABLE affecter_realjour_d_s ADD UNIQUE unique_affecter_realjour_d_s (idSemaine, idJour, idSalle, idSeance, matricule(50), idModule, codeGroupeDS(50));');
     }
 
     /**
