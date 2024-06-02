@@ -1,15 +1,20 @@
-import '../Formateur/Formateur.css';
-import { useEffect, useRef, useState } from 'react';
-import { axiosClient } from '../../api/axiosClient';
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
-import { Toast } from 'primereact/toast';
+import '../Formateur/Formateur.css'
+import {useEffect, useRef, useState} from 'react'
+import {axiosClient} from '../../api/axiosClient';
+import {Button} from 'primereact/button';
+import {Dialog} from 'primereact/dialog';
+import {Toast} from 'primereact/toast';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
+import { InputIcon } from 'primereact/inputicon';
+import { IconField } from 'primereact/iconfield';
 import { Dropdown } from 'primereact/dropdown';
-import { ConfirmDialog } from 'primereact/confirmdialog';
-import { confirmDialog } from 'primereact/confirmdialog';
+
+
+import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
+import { confirmDialog } from 'primereact/confirmdialog'; // For confirmDialog method
+
 
 export default function OptionFiliere() {
     const [visible, setVisible] = useState(false);
@@ -156,12 +161,10 @@ export default function OptionFiliere() {
                             <Button icon="pi pi-pencil" onClick={() => { setEditOptionFiliere(selectedOptionFilieres[0]); setEditVisible(true); }} severity="warning" aria-label="Notification" />
                         )}
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span className="p-input-icon-left">
-                            <i className="pi pi-search" />
-                            <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Recherche" />
-                        </span>
-                    </div>
+                    <IconField iconPosition="left">
+                    <InputIcon className="pi pi-search" />
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Recherche" />
+                </IconField>
                 </div>
             </div>
         );

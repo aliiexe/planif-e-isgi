@@ -42,17 +42,20 @@ class FiliereController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $codeFiliere)
     {
-        $filiere = Filiere::findOrFail($id);
+        $filiere = Filiere::where('codeFiliere', $codeFiliere)->firstOrFail();
 
         $validatedData = $request->validate([
+            'codeFiliere' => 'sometimes|required|string|unique:filieres,codeFiliere,' . $filiere->codeFiliere,
             'libelleFiliere' => 'sometimes|required|string|max:255',
         ]);
 
-        $filiere->update($validatedData);
+        $filiere->fill($validatedData)->save();
+
         return response()->json($filiere);
     }
+
 
     /**
      * Remove the specified resource from storage.

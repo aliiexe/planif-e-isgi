@@ -32,6 +32,7 @@ export default function Filiere() {
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -47,6 +48,7 @@ export default function Filiere() {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
+      console.log("URL de la requête PUT:", `/filieres/${editFiliere.codeFiliere}`);
       await axiosClient.put(`/filieres/${editFiliere.codeFiliere}`, editFiliere);
       setEditVisible(false);
       toast.current.show({ severity: 'success', summary: 'Succès', detail: 'La filière est mise à jour avec succès' });
@@ -148,14 +150,18 @@ export default function Filiere() {
         </Dialog>
 
         <Dialog header="Modifier une filière" visible={editVisible} style={{ width: '50vw' }} onHide={() => setEditVisible(false)}>
-          <form onSubmit={handleEdit}>
-            <div className="field">
-              <label htmlFor='editLibelleFiliere' className="label">Libellé Filière</label>
-              <InputText id='editLibelleFiliere' name='libelleFiliere' value={editFiliere.libelleFiliere} onChange={(e) => handleChange(e, true)} className="formInput" />
-            </div>
-            <Button type="submit" label="Modifier" className="edit-button" />
-          </form>
-        </Dialog>
+  <form onSubmit={handleEdit}>
+    <div className="field">
+      <label htmlFor='editCodeFiliere' className="label">Code Filière</label>
+      <InputText id='editCodeFiliere' name='codeFiliere' value={editFiliere.codeFiliere} onChange={(e) => handleChange(e, true)} className="formInput" />
+    </div>
+    <div className="field">
+      <label htmlFor='editLibelleFiliere' className="label">Libellé Filière</label>
+      <InputText id='editLibelleFiliere' name='libelleFiliere' value={editFiliere.libelleFiliere} onChange={(e) => handleChange(e, true)} className="formInput" />
+    </div>
+    <Button type="submit" label="Modifier" className="edit-button" />
+  </form>
+</Dialog>
 
         <Toast ref={toast} />
         <ConfirmDialog acceptLabel="Oui" rejectLabel="Non" />
