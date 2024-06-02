@@ -1,63 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
+import '../Formateur/Formateur.css';
+import { useEffect, useRef, useState } from 'react';
 import { axiosClient } from '../../api/axiosClient';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { Toast } from 'primereact/toast';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
-import { Toast } from 'primereact/toast';
+import { Dropdown } from 'primereact/dropdown';
+import { ConfirmDialog } from 'primereact/confirmdialog';
+import { confirmDialog } from 'primereact/confirmdialog';
 
-export default function Module() {
-  const [visible, setVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [modules, setModules] = useState([]);
-  const [options, setOptions] = useState([]);
-  const [filieres, setFilieres] = useState([]);
-  const [formData, setFormData] = useState({
-    codeModule: '',
-    libelleModule: '',
-    ordreModule: '',
-    MHT: '',
-    Coef: '',
-    EFM_Regional: false,
-    option_filieres_id: '',
-    semestreModule: ''
-  });
-  const toast = useRef(null);
-
-  const show = () => {
-    setVisible(true);
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.codeModule || !formData.libelleModule || !formData.ordreModule || !formData.MHT || !formData.Coef || !formData.option_filieres_id || !formData.semestreModule) {
-      console.error('Tous les champs doivent être remplis');
-      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Tous les champs doivent être remplis' });
-      return;
-    }
-
-    const validSemestres = ["S1", "S2", "S3", "S4", "S5"];
-    if (!validSemestres.includes(formData.semestreModule)) {
-      console.error('Semestre module invalide');
-      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Semestre module invalide' });
-      return;
-    }
-
-    try {
-      const response = await axiosClient.post('/modules', formData);
-      console.log(response);
-      fetchModules();
-      toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Le module est ajouté avec succès' });
-      setFormData({
+export default function ModuleController() {
+    const [visible, setVisible] = useState(false);
+    const [editVisible, setEditVisible] = useState(false);
+    const [error, setError] = useState();
+    const toast = useRef(null);
+    const [editModule, setEditModule] = useState(null);
+    const [modules, setModules] = useState([]);
+    const [selectedModules, setSelectedModules] = useState([]);
+    const [moduleData, setModuleData] = useState({
         codeModule: '',
         libelleModule: '',
         ordreModule: '',
@@ -65,204 +27,264 @@ export default function Module() {
         Coef: '',
         EFM_Regional: false,
         option_filieres_id: '',
-        semestreModule: ''
-      });
-      setVisible(false);
-    } catch (error) {
-      console.error(error);
-      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de l\'ajout du module' });
-    }
-  };
+        semestreModule: '',
+    });
+    const [formValues, setFormValues] = useState(moduleData);
+    const [loading, setLoading] = useState(true);
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [filiereOptions, setFiliereOptions] = useState([]);
 
-  const handleUpdate = async () => {
-    try {
-      const response = await axiosClient.put(`/modules/${selectedOption.id}`, selectedOption);
-      console.log(response);
-      fetchModules();
-      toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Le module est mis à jour avec succès' });
-    } catch (error) {
-      console.error(error);
-      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de la mise à jour du module' });
-    }
-  };
+    useEffect(() => {
+        axiosClient.get('/sanctum/csrf-cookie');
+        loadModules();
+        loadFiliereOptions();
+    }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await axiosClient.delete(`/modules/${id}`);
-      console.log(response);
-      fetchModules();
-      toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Le module a été supprimé avec succès' });
-    } catch (error) {
-      console.error(error);
-      toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Erreur lors de la suppression du module' });
-    }
-  };
+    const loadModules = () => {
+        axiosClient.get('/modules').then((response) => {
+            setModules(response.data);
+            setLoading(false);
+        });
+    };
 
-  const fetchModules = async () => {
-    try {
-      const response = await axiosClient.get('/modules');
-      setModules(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const loadFiliereOptions = () => {
+        axiosClient.get('/option-filieres').then((response) => {
+            setFiliereOptions(response.data);
+        });
+    };
 
-  const fetchOptions = async () => {
-    try {
-      const response = await axiosClient.get('/option-filieres');
-      setOptions(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const handleChange = (e, isEdit = false) => {
+        const { name, value, type } = e.target;
+        const newValue = type === 'checkbox' ? e.target.checked : value;
 
-  const fetchFilieres = async () => {
-    try {
-      const response = await axiosClient.get('/filieres');
-      setFilieres(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+        // Convertir la valeur du champ EFM_Regional en booléen
+        const finalValue = name === 'EFM_Regional' ? JSON.parse(newValue) : newValue;
 
-  useEffect(() => {
-    axiosClient.get('/sanctum/csrf-cookie');
-    fetchModules();
-    fetchOptions();
-    fetchFilieres();
-  }, []);
+        if (isEdit) {
+            setEditModule({
+                ...editModule,
+                [name]: finalValue,
+            });
+        } else {
+            setModuleData({
+                ...moduleData,
+                [name]: finalValue,
+            });
+            setFormValues({
+                ...formValues,
+                [name]: finalValue,
+            });
+        }
+    };
 
-  return (
-    <>
-      <div className="card flex justify-content-center">
-        <Button label="Ajouter un module" icon="pi pi-plus" onClick={show} />
-        <Dialog header="Ajout d'un module" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
-          <form onSubmit={handleSubmit}>
-            <div className="maindiv2">
-              <label htmlFor="codeModule" className="label">Code Module</label>
-              <InputText id="codeModule" name="codeModule" value={formData.codeModule} onChange={handleChange} className="formInput" />
-            </div>
-            <div className="maindiv2">
-              <label htmlFor="libelleModule" className="label">Libellé Module</label>
-              <InputText id="libelleModule" name="libelleModule" value={formData.libelleModule} onChange={handleChange} className="formInput" />
-            </div>
-            <div className="maindiv2">
-              <label htmlFor="ordreModule" className="label">Ordre Module</label>
-              <InputText id="ordreModule" name="ordreModule" value={formData.ordreModule} onChange={handleChange} className="formInput" />
-            </div>
-            <div className="maindiv2">
-              <label htmlFor="MHT" className="label">MHT</label>
-              <InputText id="MHT" name="MHT" value={formData.MHT} onChange={handleChange} className="formInput" />
-            </div>
-            <div className="maindiv2">
-              <label htmlFor="Coef" className="label">Coef</label>
-              <InputText id="Coef" name="Coef" value={formData.Coef} onChange={handleChange} className="formInput" />
-            </div>
-            <div className="maindiv2">
-              <label htmlFor="EFM_Regional" className="label">EFM Regional</label>
-              <input type="checkbox" id="EFM_Regional" name="EFM_Regional" checked={formData.EFM_Regional} onChange={handleChange} className="formInput" />
-            </div>
-            <div className="maindiv2">
-              <label htmlFor="option_filieres_id" className="label">Option Filieres ID</label>
-              <select
-                id="option_filieres_id"
-                name="option_filieres_id"
-                value={formData.option_filieres_id}
-                onChange={handleChange}
-                className="formInput"
-              >
-                <option value="">Sélectionner une option filière</option>
-                {options.map((option) => (
-                  <option key={option.id} value={option.id}>{option.libelleOptionFiliere}</option>
-                ))}
-              </select>
-            </div>
-            <div className="maindiv2">
-              <label htmlFor="semestreModule" className="label">Semestre Module</label>
-              <select id="semestreModule" name="semestreModule" value={formData.semestreModule} onChange={handleChange} className="formInput">
-                <option value="">Sélectionner un semestre</option>
-                <option value="S1">S1</option>
-                <option value="S2">S2</option>
-                <option value="S3">S3</option>
-                <option value="S4">S4</option>
-                <option value="S5">S5</option>
-              </select>
-            </div>
-            <button type="submit" className="add-button">Ajouter</button>
-          </form>
-        </Dialog>
-        <Toast ref={toast} />
-      </div>
+    const handleEdit = async (e) => {
+        e.preventDefault();
+        await axiosClient.put(`/modules/${editModule.id}`, editModule).then(() => {
+            setEditVisible(false);
+            toast.current.show({
+                severity: 'success',
+                summary: 'Succès',
+                detail: 'Le module est modifié avec succès',
+            });
+            loadModules();
+            setSelectedModules([]);
+        });
+    };
 
-      <div className="flex justify-content-center">
-        <div>
-          <h2>Liste des modules :</h2>
-          <DataTable value={modules} selectionMode="single" selection={selectedOption} onSelectionChange={(e) => setSelectedOption(e.value)}>
-            <Column field="codeModule" header="Code Module"></Column>
-            <Column field="libelleModule" header="Libellé Module"></Column>
-            <Column field="ordreModule" header="Ordre Module"></Column>
-            <Column field="MHT" header="MHT"></Column>
-            <Column field="Coef" header="Coef"></Column>
-            <Column field="EFM_Regional" header="EFM Regional"></Column>
-            <Column field="option_filieres_id" header="Option Filieres ID"></Column>
-            <Column field="semestreModule" header="Semestre Module"></Column>
-            <Column body={(rowData) => <Button icon="pi pi-trash" onClick={() => handleDelete(rowData.id)} />} style={{ width: '8em', textAlign: 'center' }} />
-          </DataTable>
-          {selectedOption && (
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const {
+            codeModule,
+            libelleModule,
+            ordreModule,
+            MHT,
+            Coef,
+            EFM_Regional,
+            option_filieres_id,
+            semestreModule,
+        } = moduleData;
+
+        const validatedData = {
+            codeModule,
+            libelleModule,
+            ordreModule,
+            MHT,
+            Coef,
+            // Assurez-vous que la valeur de EFM_Regional est un booléen
+            EFM_Regional: JSON.parse(EFM_Regional),
+            option_filieres_id,
+            semestreModule,
+        };
+
+        try {
+            const response = await axiosClient.post('/modules', validatedData);
+            setVisible(false);
+            toast.current.show({
+                severity: 'success',
+                summary: 'Succès',
+                detail: 'Le module est inséré avec succès',
+            });
+            loadModules();
+        } catch (error) {
+            setError('Une erreur s\'est produite lors de l\'insertion du module.');
+        }
+    };
+
+    const handleDelete = () => {
+        confirmDialog({
+            message: 'Êtes-vous sûr de vouloir supprimer ce module ?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept: async () => {
+                for (const selectedModule of selectedModules) {
+                    await axiosClient.delete(`/modules/${selectedModule.id}`).then(() => {
+                        toast.current.show({
+                            severity: 'success',
+                            summary: 'Succès',
+                            detail: 'Le module est supprimé avec succès',
+                        });
+                        loadModules();
+                    });
+                }
+                setSelectedModules([]);
+            },
+        });
+    };
+
+    const onGlobalFilterChange = (e) => {
+        setGlobalFilterValue(e.target.value);
+    };
+
+    const clearFilter = () => {
+        setGlobalFilterValue('');
+    };
+
+    const renderHeader = () => {
+        return (
+            <div className='header'>
+                <Button type="button" icon="pi pi-filter-slash" label="Vider" outlined onClick={clearFilter} />
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        {selectedModules.length > 0 && (
+                            <Button icon="pi pi-times" onClick={handleDelete} severity="danger" aria-label="Cancel" />
+                        )}
+                        {selectedModules.length === 1 && (
+                            <Button icon="pi pi-pencil" onClick={() => { setEditModule(selectedModules[0]); setEditVisible(true); }} severity="warning" aria-label="Notification" />
+                        )}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span className="p-input-icon-left">
+                            <i className="pi pi-search" />
+                            <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Recherche" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const header = renderHeader();
+
+    const semestreOptions = ['S1', 'S2', 'S3', 'S4', 'S5'];
+
+    return (
+        <>
+            <div className="card flex justify-content-center">
+                <Button label=" Ajouter un module" icon="pi pi-plus" onClick={() => setVisible(true)} />
+                <Dialog header="Ajout d'un module" visible={visible} style={{ width: '50vw' }} onHide={() => { setVisible(false); setError(); }}>
+                    <div className="maindiv2-container">
+                        <div className="maindiv2">
+                            <label htmlFor='codeModule' className="label">Code Module</label>
+                            <input type="text" id='codeModule'  name='codeModule' onChange={handleChange} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='libelleModule' className="label">Libellé Module</label>
+                            <input type="text" id='libelleModule' name='libelleModule' onChange={handleChange} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='ordreModule' className="label">Ordre Module</label>
+                            <input type="text" id='ordreModule' name='ordreModule' onChange={handleChange} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='MHT' className="label">MHT</label>
+                            <input type="text" id='MHT' name='MHT' onChange={handleChange} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='Coef' className="label">Coef</label>
+                            <input type="text" id='Coef' name='Coef' onChange={handleChange} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='EFM_Regional' className="label">EFM Regional</label>
+                            <input type="checkbox" id='EFM_Regional' name='EFM_Regional' onChange={handleChange} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='option_filieres_id' className="label">Option Filieres ID</label>
+                            <Dropdown id='option_filieres_id' name='option_filieres_id' value={formValues.option_filieres_id} options={filiereOptions.map(option => ({ label: option.libelleOptionFiliere, value: option.id }))} onChange={handleChange} placeholder="Sélectionner une option filière" className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='semestreModule' className="label">Semestre Module</label>
+                            <Dropdown id='semestreModule' name='semestreModule' value={formValues.semestreModule} options={semestreOptions.map(option => ({ label: option, value: option }))} onChange={handleChange} placeholder="Sélectionner un semestre" className="formInput" />
+                        </div>
+                    </div>
+                    <div style={{ color: "red" }}>{error}</div>
+                    <button type="submit" onClick={handleSubmit} className="add-button">Ajouter</button>
+                </Dialog>
+                <Dialog header="Modifier un module" visible={editVisible} style={{ width: '50vw' }} onHide={() => setEditVisible(false)}>
+                    <div className="maindiv2-container">
+                        <div className="maindiv2">
+                            <label htmlFor='codeModule' className="label">Code Module</label>
+                            <input type="text" id='codeModule' name='codeModule' value={editModule ? editModule.codeModule : ''} onChange={(e) => handleChange(e, true)} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='libelleModule' className="label">Libellé Module</label>
+                            <input type="text" id='libelleModule' name='libelleModule' value={editModule ? editModule.libelleModule : ''} onChange={(e) => handleChange(e, true)} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='ordreModule' className="label">Ordre Module</label>
+                            <input type="text" id='ordreModule' name='ordreModule' value={editModule ? editModule.ordreModule : ''} onChange={(e) => handleChange(e, true)} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='MHT' className="label">MHT</label>
+                            <input type="text" id='MHT' name='MHT' value={editModule ? editModule.MHT : ''} onChange={(e) => handleChange(e, true)} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='Coef' className="label">Coef</label>
+                            <input type="text" id='Coef' name='Coef' value={editModule ? editModule.Coef : ''} onChange={(e) => handleChange(e, true)} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='EFM_Regional' className="label">EFM Regional</label>
+                            <input type="checkbox" id='EFM_Regional' name='EFM_Regional' checked={editModule ? editModule.EFM_Regional : false} onChange={(e) => handleChange(e, true)} className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='option_filieres_id' className="label">Option Filieres ID</label>
+                            <Dropdown id='option_filieres_id' name='option_filieres_id' value={editModule ? editModule.option_filieres_id : ''} options={filiereOptions.map(option => ({ label: option.libelleOptionFiliere, value: option.id }))} onChange={(e) => handleChange(e, true)} placeholder="Sélectionner une option filière" className="formInput" />
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='semestreModule' className="label">Semestre Module</label>
+                            <Dropdown id='semestreModule' name='semestreModule' value={editModule ? editModule.semestreModule : ''} options={semestreOptions.map(option => ({ label: option, value: option }))} onChange={(e) => handleChange(e, true)} placeholder="Sélectionner un semestre" className="formInput" />
+                        </div>
+                    </div>
+                    <div style={{ color: "red" }}>{error}</div>
+                    <button type="submit" onClick={handleEdit} className="add-button">Modifier</button>
+                </Dialog>
+            </div>
             <div className="card">
-              <h2>Modifier le module :</h2>
-              <div className="maindiv2">
-                <label htmlFor="libelleModule" className="label">Libellé Module</label>
-                <InputText id="libelleModule" name="libelleModule" value={selectedOption.libelleModule} onChange={(e) => setSelectedOption({ ...selectedOption, libelleModule: e.target.value })} className="formInput" />
-              </div>
-              <div className="maindiv2">
-                <label htmlFor="ordreModule" className="label">Ordre Module</label>
-                <InputText id="ordreModule" name="ordreModule" value={selectedOption.ordreModule} onChange={(e) => setSelectedOption({ ...selectedOption, ordreModule: e.target.value })} className="formInput" />
-              </div>
-              <div className="maindiv2">
-                <label htmlFor="MHT" className="label">MHT</label>
-                <InputText id="MHT" name="MHT" value={selectedOption.MHT} onChange={(e) => setSelectedOption({ ...selectedOption, MHT: e.target.value })} className="formInput" />
-              </div>
-              <div className="maindiv2">
-                <label htmlFor="Coef" className="label">Coef</label>
-                <InputText id="Coef" name="Coef" value={selectedOption.Coef} onChange={(e) => setSelectedOption({ ...selectedOption, Coef: e.target.value })} className="formInput" />
-              </div>
-              <div className="maindiv2">
-                <label htmlFor="EFM_Regional" className="label">EFM Regional</label>
-                <input type="checkbox" id="EFM_Regional" name="EFM_Regional" checked={selectedOption.EFM_Regional} onChange={(e) => setSelectedOption({ ...selectedOption, EFM_Regional: e.target.checked })} className="formInput" />
-              </div>
-              <div className="maindiv2">
-                <label htmlFor="option_filieres_id" className="label">Option Filieres ID</label>
-                <select
-                  id="option_filieres_id"
-                  name="option_filieres_id"
-                  value={selectedOption ? selectedOption.option_filieres_id : ''}
-                  onChange={(e) => setSelectedOption({ ...selectedOption, option_filieres_id: e.target.value })}
-                  className="formInput"
-                >
-                  <option value="">Sélectionner une option filière</option>
-                  {options.map((option) => (
-                    <option key={option.id} value={option.id}>{option.libelleOptionFiliere}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="maindiv2">
-                <label htmlFor="semestreModule" className="label">Semestre Module</label>
-                <select id="semestreModule" name="semestreModule" value={selectedOption.semestreModule} onChange={(e) => setSelectedOption({ ...selectedOption, semestreModule: e.target.value })} className="formInput">
-                  <option value="">Sélectionner un semestre</option>
-                  <option value="S1">S1</option>
-                  <option value="S2">S2</option>
-                  <option value="S3">S3</option>
-                  <option value="S4">S4</option>
-                  <option value="S5">S5</option>
-                </select>
-              </div>
-              <button type="button" onClick={handleUpdate} className="add-button">Modifier</button>
+                <DataTable value={modules} paginator rows={10} rowsPerPageOptions={[5, 10, 25]} header={header} globalFilter={globalFilterValue} loading={loading} emptyMessage="Aucun module trouvé." selectionMode="checkbox" selection={selectedModules} onSelectionChange={(e) => setSelectedModules(e.value)}>
+                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                    <Column field="codeModule" header="Code Module"></Column>
+                    <Column field="libelleModule" header="Libellé Module"></Column>
+                    <Column field="ordreModule" header="Ordre Module"></Column>
+                    <Column field="MHT" header="MHT"></Column>
+                    <Column field="Coef" header="Coef"></Column>
+                    <Column field="EFM_Regional" header="EFM Regional" body={(rowData) => rowData.EFM_Regional ? 'Oui' : 'Non'}></Column>
+                    <Column field="option_filieres_id" header="Option Filieres ID"></Column>
+                    <Column field="semestreModule" header="Semestre Module"></Column>
+                </DataTable>
             </div>
-          )}
-        </div>
-      </div>
-    </>
-  );
+            <Toast ref={toast} />
+            <ConfirmDialog />
+        </>
+    );
 }
+
+
