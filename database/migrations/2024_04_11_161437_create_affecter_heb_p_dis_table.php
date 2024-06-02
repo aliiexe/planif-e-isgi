@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +12,14 @@ return new class extends Migration
     {
         Schema::create('affecter_heb_p_dis', function (Blueprint $table) {
             $table->id();
-            $table->UnsignedBigInteger('idSemaine');
-            $table->string('matricule');
-            $table->UnsignedBigInteger('idModule');
-            $table->string('codeGroupeDS');
-            $table->decimal('MHHD', 3,2);
-            $table->decimal('CumuleHeureDist', 10,2);
+            $table->unsignedBigInteger('idSemaine');
+            $table->string('matricule', 100); // Limitez la longueur si possible
+            $table->unsignedBigInteger('idModule');
+            $table->string('codeGroupeDS', 50); // Limitez la longueur si possible
+            $table->decimal('MHHD', 3, 2);
+            $table->decimal('CumuleHeureDist', 10, 2);
 
+            // Utilisez un index partiel si nécessaire
             $table->unique(['idSemaine', 'matricule', 'idModule', 'codeGroupeDS'], 'unique_affecter_heb_p_dis');
 
             $table->foreign('matricule')->references('matricule')->on('formateurs');
@@ -38,3 +38,4 @@ return new class extends Migration
         Schema::dropIfExists('affecter_heb_p_dis');
     }
 };
+?>

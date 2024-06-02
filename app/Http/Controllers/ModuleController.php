@@ -35,7 +35,7 @@ class ModuleController extends Controller
             'Coef' => 'required|integer',
             'EFM_Regional' => 'boolean',
             'option_filieres_id' => 'required|exists:option_filieres,id',
-            'semestreModule' => ['required', 'string', Rule::in(['1A', '2A', '3A'])],
+            'semestreModule' => ['required', 'string', Rule::in(['S1', 'S2', 'S3','S4','S5'])],
         ]);
 
         $module = Module::create($validatedData);
@@ -73,7 +73,7 @@ class ModuleController extends Controller
             'Coef' => 'required|integer',
             'EFM_Regional' => 'boolean',
             'option_filieres_id' => 'required|exists:option_filieres,id',
-            'semestreModule' => ['required', 'string', Rule::in(['1A', '2A', '3A'])],
+            'semestreModule' => ['required', 'string', Rule::in(['S1', 'S2', 'S3','S4','S5'])],
         ]);
 
         $module->update($validatedData);
