@@ -30,6 +30,7 @@ class GroupePhysiqueController extends Controller
     public function store(Request $request)
     {
         groupe_physique::create($request->all());
+        
         return response()->json("created");
     }
 
