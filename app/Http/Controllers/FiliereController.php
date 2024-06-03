@@ -42,12 +42,12 @@ class FiliereController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $codeFiliere)
+    public function update(Request $request, $id)
     {
-        $filiere = Filiere::where('codeFiliere', $codeFiliere)->firstOrFail();
+        $filiere = Filiere::findOrFail($id);
 
         $validatedData = $request->validate([
-            'codeFiliere' => 'sometimes|required|string|unique:filieres,codeFiliere,' . $filiere->codeFiliere,
+            'codeFiliere' => 'sometimes|required|string|unique:filieres,codeFiliere,' . $filiere->id,
             'libelleFiliere' => 'sometimes|required|string|max:255',
         ]);
 
@@ -55,7 +55,6 @@ class FiliereController extends Controller
 
         return response()->json($filiere);
     }
-
 
     /**
      * Remove the specified resource from storage.
