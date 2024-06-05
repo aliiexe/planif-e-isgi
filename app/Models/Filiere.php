@@ -9,12 +9,7 @@ class Filiere extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'codeFiliere';
-
-    public $incrementing = false;
-
-    protected $keyType = 'string';
+    protected $primaryKey = 'id'; // Clé primaire par défaut est 'id'
 
     protected $fillable = ['codeFiliere', 'libelleFiliere'];
 }
-

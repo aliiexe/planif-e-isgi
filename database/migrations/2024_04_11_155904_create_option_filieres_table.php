@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('option_filieres', function (Blueprint $table) {
             $table->id();
-
             $table->string('codeOptionFiliere');
             $table->string('libelleOptionFiliere');
             $table->enum('annee',['1A','2A','3A']);
@@ -24,7 +23,7 @@ return new class extends Migration
                 ->on('filieres')
                 ->onDelete('cascade');
         });
-        
+
     }
 
     /**
