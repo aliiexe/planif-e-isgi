@@ -21,3 +21,4 @@ Route::resource('formateur',FormateurController::class);
 Route::resource('filieres', FiliereController::class);
 Route::resource('option-filieres', OptionFiliereController::class);
 Route::resource('modules', ModuleController::class);
+Route::post('/choose',[GroupePhysiqueController::class,"choose"]);

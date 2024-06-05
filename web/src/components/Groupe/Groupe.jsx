@@ -9,7 +9,7 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
-
+import { SelectButton } from 'primereact/selectbutton';
 
 
 import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
@@ -55,6 +55,7 @@ export default function Groupe() {
             });
         }
         console.log(isEdit ? editgroupe : groupe);
+        console.log(groupe)
     };
 
     const handleEdit = async (e) => {
@@ -74,7 +75,7 @@ export default function Groupe() {
 
     const handleSubmit = async (e) => {
         console.log(groupe.codeGroupePhysique)
-        if (!groupe.codeGroupePhysique || !groupe.libelleGroupe) {
+        if (1>1) {
             seterror('tous les champs sont requis')
             return
         } else {
@@ -98,6 +99,7 @@ export default function Groupe() {
             load()
         }
     }
+    const[filieres,setfilieres]=useState([]);
 const load=()=>{
     axiosClient.get('/groupe').then((a) => {
         setgroupes(a.data)
@@ -110,6 +112,10 @@ console.log(a.data)
     useEffect(() => {
         axiosClient.get('/sanctum/csrf-cookie')
       load()
+      axiosClient.get('/filieres').then((ele)=>{
+            setfilieres(ele.data)
+            console.log(ele.data)
+      })
     }, []);
     const [loading, setLoading] = useState(true);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
@@ -167,26 +173,70 @@ console.log(a.data)
         );
     };
     const header = renderHeader();
+    const [donnes,setdonnes]=useState("presentiel")
+    useEffect(()=>{
+        donnes=="presntiel"?axiosClient.post('/choose',{type:donnes}).then((a)=>{
+            setgroupes(a.data)
+            console.log(a.data)
+        }):axiosClient.post('/choose',{type:donnes}).then((a)=>{
+            setgroupes(a.data)
+            console.log(a.data)
+        })
+    },[donnes])
 
     return (
         <>
 
             <div className="card flex justify-content-center">
                 <Button label=" Ajouter un groupe" icon="pi pi-plus" onClick={() => setVisible(true)}/>
+                
+                <div className="card flex justify-content-center">
+                    <br></br>
+            <SelectButton optionLabel="name" value={donnes} onChange={(e) => setdonnes(e.target.value)}  options={[
+                  { name: 'presentiel', value:"presentiel"},
+        { name: 'distanciel', value: "distanciel" },
+      
+  
+    ]} />
+        </div>
+        <br></br>
                 <Dialog header="Ajout d'un groupe" visible={visible} style={{width: '50vw'}} onHide={() => {
                     setVisible(false);
                     seterror()
                 }}>
                     <div className="maindiv2-container">
+                    <div className="mainCheckbox">
+                        <label htmlFor='is_permanent' className="label">
+                            <input type='radio' value={"presentiel"} name='typegroupe' onChange={handleChange}/>Presentiel
+                        </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label htmlFor='is_vacataire' className="label">
+                            <input type='radio' value={"distanciel"} name='typegroupe'   onChange={handleChange}/>Distanciel
+                        </label>    
+                    </div>
+                    <br></br>
                         <div className="maindiv2">
                             <label htmlFor='nom' className="label">Code</label>
-                            <input type="text" id='nom' name='codeGroupePhysique' onChange={handleChange}
+                            <input type="text" id='nom' name={groupe?.typegroupe=="distanciel"?"codeGroupeDS":"codeGroupePR"} onChange={handleChange}
                                    className="formInput"/>
                         </div>
                         <div className="maindiv2">
                             <label htmlFor='prenom' className="label">Libelle</label>
-                            <input type="text" id='prenom' name='libelleGroupe' onChange={handleChange}
+                            <input type="text" id='prenom' name={groupe?.typegroupe=="distanciel"?"libelleGroupeDS":"libelleGroupePR"} onChange={handleChange}
                                    className="formInput"/>
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='prenom' className="label"> Code Option Filiere</label>
+                            <input type="text" id='prenom' name='groupeCodeOptionFiliere' onChange={handleChange}
+                                   className="formInput"/>
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='civilite' className="label">Filiere</label>
+                            <select id='civilite' name='option_filieres_id' onChange={handleChange} className="formInput">
+                                <option disabled selected>Selectionnez une civilité</option>
+                               {filieres.map((a)=>{return(<option value={a.codeFiliere}>{a.libelleFiliere}</option>
+                               
+                            )})}
+                            </select>
                         </div>
                     </div>
                     <div style={{"color": "red"}}>{error}</div>
@@ -205,36 +255,78 @@ console.log(a.data)
             </div>
         </div>
 
-     
+        <div className="maindiv2">
+                            <label htmlFor='prenom' className="label"> Code Option Filiere</label>
+                            <input type="text" id='prenom' name='libelleGroupe' onChange={handleChange}
+                                   className="formInput"/>
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='civilite' className="label">Filiere</label>
+                            <select id='civilite' name='option_filieres_id' onChange={handleChange} className="formInput">
+                                <option disabled selected>Selectionnez une civilité</option>
+                               {filieres.map((a)=>{return(<option value={a.codeFiliere}>{a.libelleFiliere}</option>
+                               
+                            )})}
+                            </select>
+                        </div>
 
         
         <button type="submit" onClick={handleEdit} className="add-button">Modifier</button>
     </div>
-                </Dialog>
-                <div className="container">
-                  <DataTable 
-                  value={groupes}  
-                  paginator rows={10} 
-                  dataKey="id" 
-                  scrollable scrollHeight="64vh" 
-                  sortMode="multiple" 
-                  tableStyle={{ minWidth: '50rem' }} 
-                  className='groupesTable'
-                  emptyMessage="Pas de groupes trouvées."
-                  header={header}
-                  loading={loading}
-                  globalFilter={globalFilterValue}
-                  globalFilterFields={['libelleGroupe','codeGroupePhysique']}
-                  selectionMode="multiple"
-                  selection={selectedgroupes} 
-                  onSelectionChange={(e) => setSelectedgroupes(e.value)}
-                  >
-                      <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                      <Column sortable style={{ minWidth: '15rem' }} field="libelleGroupe" header="Libelle groupe"></Column>
-                      <Column sortable style={{ minWidth: '15rem' }} field="codeGroupePhysique" header="Code groupe"></Column>
-
-                  </DataTable>
-                </div>
+    </Dialog>
+    {donnes === "presentiel" ? (
+                <DataTable
+                    value={groupes}
+                    paginator
+                    rows={10}
+                    dataKey="codeGroupePR"
+                    scrollable
+                    scrollHeight="64vh"
+                    sortMode="multiple"
+                    tableStyle={{ minWidth: '50rem' }}
+                    className='groupesTable'
+                    emptyMessage="Pas de groupes trouvés."
+                    header={header}
+                    loading={loading}
+                    globalFilter={globalFilterValue}
+                    globalFilterFields={['libelleGroupePR', 'codeGroupePR', 'groupeCodeOptionFiliere', 'option_filieres_id']}
+                    selectionMode="multiple"
+                    selection={selectedgroupes}
+                    onSelectionChange={(e) => setSelectedgroupes(e.value)}
+                >
+                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="libelleGroupePR" header="Libelle Groupe Présentiel"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="codeGroupePR" header="Code Groupe Présentiel"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="groupeCodeOptionFiliere" header="Code Option Filiere"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="option_filieres_id" header="ID Option Filiere"></Column>
+                </DataTable>
+            ) : (
+                <DataTable
+                    value={groupes}
+                    paginator
+                    rows={10}
+                    dataKey="codeGroupeDS"
+                    scrollable
+                    scrollHeight="64vh"
+                    sortMode="multiple"
+                    tableStyle={{ minWidth: '50rem' }}
+                    className='groupesTable'
+                    emptyMessage="Pas de groupes trouvés."
+                    header={header}
+                    loading={loading}
+                    globalFilter={globalFilterValue}
+                    globalFilterFields={['libelleGroupeDS', 'codeGroupeDS', 'groupeCodeOptionFiliere', 'option_filieres_id']}
+                    selectionMode="multiple"
+                    selection={selectedgroupes}
+                    onSelectionChange={(e) => setSelectedgroupes(e.value)}
+                >
+                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="libelleGroupeDS" header="Libelle Groupe Distanciel"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="codeGroupeDS" header="Code Groupe Distanciel"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="groupeCodeOptionFiliere" header="Code Option Filiere"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="option_filieres_id" header="ID Option Filiere"></Column>
+                </DataTable>
+            )}
                 <Toast ref={toast}/>
                 <ConfirmDialog acceptLabel="Oui" rejectLabel="Non" />
             </div>

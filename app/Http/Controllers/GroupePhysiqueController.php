@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\groupe_physique;
 use App\Http\Requests\Storegroupe_physiqueRequest;
 use Illuminate\Http\Request;
-
+use App\Models\groupe_distanciel;
+use App\Models\groupe_presentiel;
 class GroupePhysiqueController extends Controller
 {
     /**
@@ -14,6 +15,13 @@ class GroupePhysiqueController extends Controller
     public function index()
     {
         return response()->json(groupe_physique::all());
+    }
+    public function choose(Request $request){
+        if($request->type=="presentiel"){
+            return response()->json(groupe_presentiel::all());
+        }else{
+            return response()->json(groupe_distanciel::all());
+        }
     }
 
     /**
@@ -29,7 +37,27 @@ class GroupePhysiqueController extends Controller
      */
     public function store(Request $request)
     {
-        groupe_physique::create($request->all());
+        if($request->typegroupe=="distanciel"){
+            $data = $request->only([
+                'codeGroupeDS',
+                'libelleGroupeDS',
+                'groupeCodeOptionFiliere',
+                'option_filieres_id',
+            ]);
+            $groupe_dis=new groupe_distanciel($data);
+            $groupe_dis->save();
+        }else{ 
+            $data = $request->only([
+                'codeGroupePR',
+                'libelleGroupePR',
+                'groupeCodeOptionFiliere',
+                'option_filieres_id',
+            ]);
+            $groupe_pre=new groupe_presentiel($data);
+            $groupe_pre->save();
+            
+            groupe_physique::create(["libelleGroupe"=>$request->libelleGroupePR,"codeGroupePhysique"=>$request->codeGroupePR]);
+        }
         
         return response()->json("created");
     }
