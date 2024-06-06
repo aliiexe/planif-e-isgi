@@ -16,6 +16,26 @@ class GroupePhysiqueController extends Controller
     {
         return response()->json(groupe_physique::all());
     }
+
+    public function editgroupe(Request $request){
+       if($request->type=="pres"){
+        $groupe=groupe_presentiel::where('codeGroupePR',"=",$request->codeGroupePR)->first();
+        $groupe->groupeCodeOptionFiliere=$request->groupeCodeOptionFiliere;
+        $groupe->libelleGroupePR=$request->libelleGroupePR;
+        $groupe->option_filieres_id=$request->option_filieres_id;
+        $groupe->save();
+        return response()->json($groupe);                     
+       }else{
+        $groupe=groupe_distanciel::where('codeGroupeDS',"=",$request->codeGroupeDS)->first();
+            $groupe->groupeCodeOptionFiliere = $request->groupeCodeOptionFiliere;
+            $groupe->libelleGroupeDS = $request->libelleGroupeDS;
+            $groupe->option_filieres_id = $request->option_filieres_id;
+            $groupe->save();
+            return response()->json($groupe);
+        
+       }
+    }
+
     public function choose(Request $request){
         if($request->type=="presentiel"){
             return response()->json(groupe_presentiel::all());
@@ -96,10 +116,16 @@ class GroupePhysiqueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function groupedel(Request $request)
     {
-        $groupe_physique=groupe_physique::find($id);
-        $groupe_physique->delete();
-        return response()->json("dlee");
+  
+        if($request->type=="presentiel"){
+            $groupe=groupe_presentiel::where('codeGroupePR',"=",$request->codeGroupePR)->first();
+            $groupe->delete();
+        return response()->json("dlee");}else{
+            $groupe=groupe_distanciel::where('codeGroupeDS',"=",$request->codeGroupeDS)->first();
+            $groupe->delete();
+            return response()->json("dlee");
+        }
     }
 }

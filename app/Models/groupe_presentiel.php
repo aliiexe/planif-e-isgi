@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class groupe_presentiel extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'codeGroupePR';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'codeGroupePR',
         'libelleGroupePR',

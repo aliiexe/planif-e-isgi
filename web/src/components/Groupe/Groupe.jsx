@@ -20,9 +20,10 @@ import { confirmDialog } from 'primereact/confirmdialog'; // For confirmDialog m
 export default function Groupe() {
     const [visible, setVisible] = useState(false);
     const [editVisible, setEditVisible] = useState(false);
+    const [editVisible2, setEditVisible2] = useState(false);
     const [error, seterror] = useState()
     const toast = useRef(null);
-    const [editgroupe, setEditgroupe] = useState(null);
+    const [editgroupe, setEditgroupe] = useState({});
     const [groupes, setgroupes] = useState([])
     const [selectedgroupes, setSelectedgroupes] = useState(null);
     const [groupe, setgroupe] = useState({
@@ -59,8 +60,15 @@ export default function Groupe() {
     };
 
     const handleEdit = async (e) => {
+        let type=""
+        if (editgroupe && "codeGroupeDS" in editgroupe) {
+          type="dis"
+        }else{
+            type="pres"
+        }
+        
         e.preventDefault();
-        const response = await axiosClient.put(`/groupe/${editgroupe.id}`, editgroupe).then((a) => {
+        const response = await axiosClient.post("/editgroupe", {...editgroupe,type:type}).then((a) => {
             setEditVisible(false);
             console.log(a);
             toast.current.show({
@@ -68,7 +76,7 @@ export default function Groupe() {
                 summary: 'Succès',
                 detail: 'Le groupe est modifié avec succès'
             });
-            getgroupes();
+            load()
         });
   
     };
@@ -101,7 +109,7 @@ export default function Groupe() {
     }
     const[filieres,setfilieres]=useState([]);
 const load=()=>{
-    axiosClient.get('/groupe').then((a) => {
+    axiosClient.post('/choose',{type:donnes}).then((a) => {
         setgroupes(a.data)
        if(a.data.length>0){
 console.log(a.data)
@@ -127,17 +135,30 @@ console.log(a.data)
             icon: 'pi pi-exclamation-triangle',
             accept: async () => {
                 selectedgroupes.map(async (a) => {
-                    const response = await axiosClient.delete('/groupe/'+a.id).then((a) => {
-                        console.log(a.data)
+                    if(donnes=="presentiel"){
+                    const response = await axiosClient.post('/groupedel',{type:donnes,codeGroupePR:a.codeGroupePR}).then((ala) => {
+                        console.log(ala.data)
                         toast.current.show({
                             severity: 'success',
                             summary: 'Succès',
                             detail: 'Le groupe est supprimé avec succès'
                         });
-                        getgroupes()
+                        load()
+                        setSelectedgroupes(null)
                     })
                  
+            }else{
+                const response = await axiosClient.post('/groupedel',{type:donnes,codeGroupeDS:a.codeGroupeDS}).then((ala) => {
+                    console.log(ala.data)
+                    setSelectedgroupes(null)
+                    toast.current.show({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Le groupe est supprimé avec succès'
+                    });
+                    load()
                 })
+            }})
             },
             reject: () => {
                 return;
@@ -161,8 +182,8 @@ console.log(a.data)
                     <Button icon="pi pi-times" onClick={handleDelete} severity="danger" aria-label="Cancel" />
                   )}
                   {selectedgroupes && selectedgroupes.length === 1 && (
-                    <Button icon="pi pi-pencil" onClick={() => { console.log(selectedgroupes);setEditgroupe(selectedgroupes[0]); setEditVisible(true); }} severity="warning" aria-label="Notification" />
-                  )}
+                    <Button icon="pi pi-pencil" onClick={() => { console.log(selectedgroupes);setEditgroupe(selectedgroupes[0])
+                    ; setEditVisible(true) }} severity="warning" aria-label="Notification" />)}
                 </div>
                 <IconField iconPosition="left">
                     <InputIcon className="pi pi-search" />
@@ -192,7 +213,7 @@ console.log(a.data)
                 
                 <div className="card flex justify-content-center">
                     <br></br>
-            <SelectButton optionLabel="name" value={donnes} onChange={(e) => setdonnes(e.target.value)}  options={[
+            <SelectButton optionLabel="name" value={donnes} onChange={(e) => {setdonnes(e.target.value);setSelectedgroupes(null)}}  options={[
                   { name: 'presentiel', value:"presentiel"},
         { name: 'distanciel', value: "distanciel" },
       
@@ -243,37 +264,38 @@ console.log(a.data)
                     <button type="submit" onClick={handleSubmit} className="add-button">Ajouter</button>
                 </Dialog>
                 <Dialog header="Modifier un groupe" visible={editVisible} style={{width: '50vw'}} onHide={() => setEditVisible(false)}>
-                <div>
+    <div>
         <div className="maindiv2-container">
+           
             <div className="maindiv2">
-                <label htmlFor='libelleGroupe' className="label">Libelle groupe</label>
-                <input  type="text" id='libelleGroupe' name='libelleGroupe' value={editgroupe?.libelleGroupe} onChange={(e)=>handleChange(e,true)} className="formInput"/>
+                <label htmlFor='prenom' className="label">CodeGroupe</label>
+                <input type="text" id='prenom' disabled name={"codeGroupeDS" in editgroupe?"codeGroupeDS":"codeGroupePR"} value={"codeGroupeDS" in editgroupe ? editgroupe.codeGroupeDS : editgroupe.codeGroupePR}   onChange={(e)=>handleChange(e,true)} className="formInput"/>
             </div>
             <div className="maindiv2">
-                <label htmlFor='codeGroupePhysique' className="label">Code groupe</label>
-                <input type="codeGroupePhysique" id='codeGroupePhysique' name='codeGroupePhysique' value={editgroupe?.codeGroupePhysique} onChange={(e)=>handleChange(e,true)} className="formInput"/>
+                <label htmlFor='prenom' className="label">Libelle groupe</label>
+                <input type="text" id='prenom' name={"libelleGroupeDS" in editgroupe ?"libelleGroupeDS":"libelleGroupePR"} value={"libelleGroupeDS" in editgroupe ? editgroupe.libelleGroupeDS : editgroupe.libelleGroupePR} onChange={(e)=>handleChange(e,true)} className="formInput"/>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='prenom' className="label"> Code Option Filiere</label>
+                <input type="text" id='prenom' name='groupeCodeOptionFiliere' value={editgroupe?.groupeCodeOptionFiliere || ''} onChange={(e)=>handleChange(e,true)} className="formInput"/>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='civilite' className="label">Filiere</label>
+                <select id='civilite' name='option_filieres_id' value={editgroupe?.option_filieres_id || ''} onChange={(e)=>handleChange(e,true)} className="formInput">
+                    <option disabled selected>Selectionnez une civilité</option>
+                    {filieres.map((a) => (
+                        <option value={a.codeFiliere} key={a.codeFiliere}>{a.libelleFiliere}</option>
+                    ))}
+                </select>
             </div>
         </div>
 
-        <div className="maindiv2">
-                            <label htmlFor='prenom' className="label"> Code Option Filiere</label>
-                            <input type="text" id='prenom' name='libelleGroupe' onChange={handleChange}
-                                   className="formInput"/>
-                        </div>
-                        <div className="maindiv2">
-                            <label htmlFor='civilite' className="label">Filiere</label>
-                            <select id='civilite' name='option_filieres_id' onChange={handleChange} className="formInput">
-                                <option disabled selected>Selectionnez une civilité</option>
-                               {filieres.map((a)=>{return(<option value={a.codeFiliere}>{a.libelleFiliere}</option>
-                               
-                            )})}
-                            </select>
-                        </div>
-
-        
         <button type="submit" onClick={handleEdit} className="add-button">Modifier</button>
     </div>
-    </Dialog>
+</Dialog>
+
+
+   
     {donnes === "presentiel" ? (
                 <DataTable
                     value={groupes}
