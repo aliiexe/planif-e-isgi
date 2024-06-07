@@ -48,7 +48,7 @@ class FormateurController extends Controller
         $formateur->MasseHoaraireHeb = $request->MasseHoaraireHeb;
         $formateur->Filiere = $request->Filiere;
         $formateur->Categorie = $request->Categorie;
-        $formateur->idEtablissement = $request->idEtablissement;
+        $formateur->idEtablissement = 1;
         $formateur->save();
 
         if($request->input('is_permanent')) {

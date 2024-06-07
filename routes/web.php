@@ -1,6 +1,7 @@
 
 <?php
 
+use App\Http\Controllers\AffectationFormodgrController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +22,7 @@ Route::resource('formateur',FormateurController::class);
 Route::resource('filieres', FiliereController::class);
 Route::resource('option-filieres', OptionFiliereController::class);
 Route::resource('modules', ModuleController::class);
+Route::resource('affectation', AffectationFormodgrController::class);
 Route::post('/choose',[GroupePhysiqueController::class,"choose"]);
 Route::post('/editgroupe',[GroupePhysiqueController::class,"editgroupe"]);
 Route::post('/groupedel',[GroupePhysiqueController::class,"groupedel"]);

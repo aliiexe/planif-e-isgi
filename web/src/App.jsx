@@ -10,6 +10,7 @@ import Groupe from './components/Groupe/Groupe';
 import Filiere from './components/Filiere/Filiere';
 import OptionFiliere from './components/Filiere/OptionFiliere';
 import Module from './components/Module/Module';
+import Affectation from './components/Affectation/Affectation';
 
 
 
@@ -26,6 +27,7 @@ function App() {
             <Route path='/filieres' element={<Filiere/>}></Route>
             <Route path='/optionfilieres' element={<OptionFiliere/>}></Route>
             <Route path='/modules' element={<Module/>}></Route>
+            <Route path='/affectation' element={<Affectation></Affectation>}></Route>
           </Routes>
         </div>
       </div>
