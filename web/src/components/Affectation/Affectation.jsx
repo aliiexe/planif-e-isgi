@@ -40,13 +40,13 @@ export default function Affectation() {
         getAffectations();
      },[])
     const handleChange = (e, isEdit = false) => {
-        if(e.target.name=="matriculeprof"){
+        if(e.target.name=="matriculeprof" || e.target.name=="idModule"){
             axiosClient.get('/groupe').then((data)=>{
         
                 console.log(Affectations)
-                console.log(groupes)
+
                 console.log(e.target.value)
-                let toremove=Affectations.filter((ele)=>{return ele.matriculeprof==e.target.value})
+                let toremove=Affectations.filter((ele)=>{return ele.matriculeprof==Affectation.matriculeprof && ele.idModule==Affectation.idModule})
                 console.log(toremove)
                 let test = data.data.filter(group => 
                     !toremove.some(affectation => affectation.idGroupePhysique == group.id)
@@ -97,23 +97,21 @@ export default function Affectation() {
             return
         } else {
             e.preventDefault();
-            Affectations.map((a) => {
-                if (a.codeAffectationPhysique == Affectation.codeAffectationPhysique) {
-                    seterror('le code de Affectation existe deja')
-                    return
-                }
-            })
+   
             const response = await axiosClient.post('/affectation', Affectation).then((a) => {
                 setVisible(false)
+                load()
                 console.log(a)
                 toast.current.show({
                     severity: 'success',
                     summary: 'Succès',
                     detail: 'Le Affectation est inséré avec succès'
                 });
-            })
+            }).catch(err=>{                
+                seterror(err.response.data)}
+            )
             console.log(response)
-            load()
+          
         }
     }
     const[filieres,setfilieres]=useState([]);
@@ -216,20 +214,6 @@ useEffect(()=>{
                 }}>
                     <div className="maindiv2-container">
           
-                    <div className="maindiv2">
-                            <label htmlFor='civilite' className="label">Anne formation</label>
-                            <select id='civilite' name='semaineAnneeFormation' onChange={handleChange} className="formInput">
-                                <option disabled selected>Selectionnez un Module</option>
-                               {modules.map((a)=>{return(<option value={"anne2022"}>{a.libelleModule} ({a.codeModule})</option>
-                               
-                            )})}
-                            </select>
-                        </div>
-                        <div className="maindiv2">
-                            <label htmlFor='nom' className="label">Matricule affectation</label>
-                            <input type="text" id='matricule' name='matricule'  onChange={handleChange}
-                                   className="formInput"/>
-                        </div>
                         <div className="maindiv2">
                             <label htmlFor='civilite' className="label">Module</label>
                             <select id='civilite' name='idModule' onChange={handleChange} className="formInput">
@@ -257,15 +241,7 @@ useEffect(()=>{
                             )})}
                             </select>
                         </div>
-                        <div className="maindiv2">
-                            <label  className="label">date EFM pre</label>
-                            <input type="date" name='dateEFMPre' onChange={handleChange} className="formInput"/>
                         </div>
-                        <div className="maindiv2">
-                            <label  className="label">date EFM real</label>
-                            <input type="date" name='dateEFMReal' onChange={handleChange} className="formInput"/>
-                        </div>
-                    </div>
                     <div style={{"color": "red"}}>{error}</div>
                     <button type="submit" onClick={handleSubmit} className="add-button">Ajouter</button>
                 </Dialog>
@@ -311,18 +287,19 @@ useEffect(()=>{
                     className='AffectationsTable'
                     emptyMessage="Pas de Affectations trouvés."
                     header={header}
-                    loading={loading}
+             
                     globalFilter={globalFilterValue}
-                    globalFilterFields={['libelleAffectationPR', 'codeAffectationPR', 'AffectationCodeOptionFiliere', 'option_filieres_id']}
+                    globalFilterFields={['codeAffectationPR', 'AffectationCodeOptionFiliere', 'option_filieres_id']}
                     selectionMode="multiple"
                     selection={selectedAffectations}
                     onSelectionChange={(e) => setSelectedAffectations(e.value)}
                 >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="libelleAffectationPR" header="Libelle Affectation Présentiel"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="codeAffectationPR" header="Code Affectation Présentiel"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="AffectationCodeOptionFiliere" header="Code Option Filiere"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="option_filieres_id" header="ID Option Filiere"></Column>
+
+                    <Column sortable style={{ minWidth: '15rem' }} field="formateur.nom" header="nom formateur"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="formateur.prenom" header="prenom formateur"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="groupe.libelleGroupe" header="libelle groupe"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="module.libelleModule" header="ID Option Filiere"></Column>
                 </DataTable>
            
                 <Toast ref={toast}/>

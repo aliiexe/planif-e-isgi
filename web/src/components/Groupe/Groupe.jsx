@@ -10,7 +10,7 @@ import { InputText } from 'primereact/inputtext';
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
 import { SelectButton } from 'primereact/selectbutton';
-
+import { Dropdown } from 'primereact/dropdown';
 
 import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
 import { confirmDialog } from 'primereact/confirmdialog'; // For confirmDialog method
@@ -195,7 +195,15 @@ console.log(a.data)
     };
     const header = renderHeader();
     const [donnes,setdonnes]=useState("presentiel")
+    const [groupeselect,setgroupeselect]=useState([])
+    const [groupepres1,setgroupepres1]=useState([]);
+    const [groupepres2,setgroupepres2]=useState([]);
+
     useEffect(()=>{
+        axiosClient.get('/groupe').then((a)=>{
+            setgroupepres1(a.data)
+            setgroupepres2(a.data)
+        })
         donnes=="presntiel"?axiosClient.post('/choose',{type:donnes}).then((a)=>{
             setgroupes(a.data)
             console.log(a.data)
@@ -204,6 +212,7 @@ console.log(a.data)
             console.log(a.data)
         })
     },[donnes])
+
 
     return (
         <>
@@ -257,9 +266,35 @@ console.log(a.data)
                                {filieres.map((a)=>{return(<option value={a.codeFiliere}>{a.libelleFiliere}</option>
                                
                             )})}
+                            
                             </select>
                         </div>
+                        {groupe.typegroupe=="distanciel"?<>
+                        <div className="maindiv2">
+                            <label htmlFor='civilite' className="label">groupe reel liée 1</label>
+                            <select id='civilite' name='groupePres1' onChange={(e)=>{handleChange(e);setgroupepres2([...groupepres1.filter((a)=>a.id !=e.target.value)])}} className="formInput">
+                                <option disabled selected>Selectionnez un groupe</option>
+                               {groupepres1.map((a)=>{return(<option value={a.id}>{a.codeGroupePhysique}</option>
+                               
+                            )})}
+                            
+                            </select>
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='civilite' className="label">groupe reel liée 2</label>
+                            <select id='civilite' name='groupePres2' onChange={(e)=>{handleChange(e)}} className="formInput">
+                                <option disabled selected>Selectionnez un groupe</option>
+                               {groupepres2.map((a)=>{return(<option value={a.id}>{a.codeGroupePhysique}</option>
+                               
+                            )})}
+                            
+                            </select>
+                            
+                
+                        </div></>:""}
+        
                     </div>
+                    
                     <div style={{"color": "red"}}>{error}</div>
                     <button type="submit" onClick={handleSubmit} className="add-button">Ajouter</button>
                 </Dialog>
@@ -311,14 +346,14 @@ console.log(a.data)
                     header={header}
                     loading={loading}
                     globalFilter={globalFilterValue}
-                    globalFilterFields={['libelleGroupePR', 'codeGroupePR', 'groupeCodeOptionFiliere', 'option_filieres_id']}
+                    globalFilterFields={['libelleGroupePhysique', 'codeGroupePhysique', 'groupeCodeOptionFiliere', 'option_filieres_id']}
                     selectionMode="multiple"
                     selection={selectedgroupes}
                     onSelectionChange={(e) => setSelectedgroupes(e.value)}
                 >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="libelleGroupePR" header="Libelle Groupe Présentiel"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="codeGroupePR" header="Code Groupe Présentiel"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="libelleGroupe" header="Libelle Groupe Présentiel"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="codeGroupePhysique" header="Code Groupe Présentiel"></Column>
                     <Column sortable style={{ minWidth: '15rem' }} field="groupeCodeOptionFiliere" header="Code Option Filiere"></Column>
                     <Column sortable style={{ minWidth: '15rem' }} field="option_filieres_id" header="ID Option Filiere"></Column>
                 </DataTable>

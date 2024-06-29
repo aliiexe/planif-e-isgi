@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\affectation_formodgr;
 use App\Models\Formateur;
 use Illuminate\Http\Request;
+use App\Models\affectation_formodgr;
 
 class AffectationFormodgrController extends Controller
 {
@@ -15,7 +15,7 @@ class AffectationFormodgrController extends Controller
     {
         //
 
-        return response()->json(affectation_formodgr::all());
+        return response()->json(affectation_formodgr::with(['module','formateur','groupe'])->get());
     }
 
     /**
@@ -35,11 +35,15 @@ class AffectationFormodgrController extends Controller
         $formateur=Formateur::where("matricule","=",$request->matriculeprof)->first();
         if($formateur->MasseHoaraireHeb>2.5){
             $formateur->MasseHoaraireHeb=$formateur->MasseHoaraireHeb/2;
-            affectation_formodgr::create($request->all());
+            affectation_formodgr::create(["semaineAnneeFormation"=>"20222023",
+        "dateEFMPre"=>date('Y-m-d'),'dateEFMReal'=>date('Y-m-d'),'matriculeprof'=>$request->matriculeprof,
+        "idGroupePhysique"=>$request->idGroupePhysique,"matricule"=>uniqid(),"idModule"=>$request->idModule]);
             $formateur->save();
         }elseif($formateur->MasseHoaraireHeb==2.5){
             $formateur->MasseHoaraireHeb=0;
-            affectation_formodgr::create($request->all());
+            affectation_formodgr::create(["semaineAnneeFormation"=>"20222023",
+            "dateEFMPre"=>date('Y-m-d'),'dateEFMReal'=>date('Y-m-d'),'matriculeprof'=>$request->matriculeprof,
+            "idGroupePhysique"=>$request->idGroupePhysique,"matricule"=>uniqid(),"idModule"=>$request->idModule]);
             $formateur->save();
         }else{
             return response()->json("formateur a arriver au maximum des affectations par rapport a ses masse horaire hebdomadaire",500);

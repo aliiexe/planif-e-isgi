@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class groupe_distanciel extends Model
 {
@@ -16,5 +16,7 @@ class groupe_distanciel extends Model
         'libelleGroupeDS',
         'groupeCodeOptionFiliere',
         'option_filieres_id',
+        'groupePres1',
+        'groupePres2',
     ];
 }
