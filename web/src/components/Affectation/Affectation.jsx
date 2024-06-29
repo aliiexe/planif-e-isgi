@@ -39,21 +39,28 @@ export default function Affectation() {
      useEffect(()=>{
         getAffectations();
      },[])
+     const [groupesel,setgroupesel]=useState([])
+    
     const handleChange = (e, isEdit = false) => {
         if(e.target.name=="matriculeprof" || e.target.name=="idModule"){
-            axiosClient.get('/groupe').then((data)=>{
+
         
                 console.log(Affectations)
 
                 console.log(e.target.value)
-                let toremove=Affectations.filter((ele)=>{return ele.matriculeprof==Affectation.matriculeprof && ele.idModule==Affectation.idModule})
+                let toremove=[]
+                if(e.target.name=="matriculeprof"){
+                toremove=Affectations.filter((ele)=>{return ele.matriculeprof==e.target.value})}
+              if(e.target.name=="idModule"){
+                toremove=Affectations.filter((ele)=>{return ele.idModule==e.target.value})}
+      
                 console.log(toremove)
-                let test = data.data.filter(group => 
+                let test = groupes.filter(group => 
                     !toremove.some(affectation => affectation.idGroupePhysique == group.id)
                   );
-                
-                setgroupes(test)
-            })
+              
+                setgroupesel(test)
+     
         
       
         }
@@ -195,6 +202,7 @@ useEffect(()=>{
     })
     axiosClient.get('/groupe').then((a)=>{
         setgroupes(a.data)
+        setgroupesel(a.data)
     })
     axiosClient.get('/modules').then((a)=>{
         setmodules(a.data)
@@ -236,7 +244,7 @@ useEffect(()=>{
                             <label htmlFor='civilite' className="label">Groupe</label>
                             <select id='civilite' name='idGroupePhysique' onChange={handleChange} className="formInput">
                                 <option disabled selected>Selectionnez une groupe</option>
-                               {groupes.map((a)=>{return(<option value={a.id}>{a.libelleGroupe}({a.codeGroupePhysique })</option>
+                               {groupesel.map((a)=>{return(<option value={a.id}>{a.libelleGroupe}({a.codeGroupePhysique })</option>
                                
                             )})}
                             </select>
