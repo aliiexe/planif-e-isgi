@@ -123,7 +123,7 @@ export default function Affectation() {
     }
     const[filieres,setfilieres]=useState([]);
 const load=()=>{
-
+axiosClient.get('/affectation').then((a)=>setAffectations(a.data))
 }
     useEffect(() => {
         axiosClient.get('/sanctum/csrf-cookie')
@@ -143,7 +143,6 @@ const load=()=>{
             icon: 'pi pi-exclamation-triangle',
             accept: async () => {
                 selectedAffectations.map(async (a) => {
-              
                     const response = await axiosClient.post('/Affectationdel',{codeAffectationPR:a.codeAffectationPR}).then((ala) => {
                         console.log(ala.data)
                         toast.current.show({
@@ -196,7 +195,9 @@ const load=()=>{
 const[modules,setmodules]=useState([]);
 const[groupes,setgroupes]=useState([]);
 const[formateurs,setformateurs]=useState([]);
+const [optionfillieres,setoptionfilliers]=useState([])
 useEffect(()=>{
+    axiosClient.get('/option-filieres').then(a=>setoptionfilliers(a.data))
     axiosClient.get('/formateur').then((a)=>{
         setformateurs(a.data)
     })
@@ -236,6 +237,19 @@ useEffect(()=>{
                             <select id='civilite' name='matriculeprof' onChange={handleChange} className="formInput">
                                 <option disabled selected>Selectionnez une formateur</option>
                                {formateurs.map((a)=>{return(<option value={a.matricule}>{a.nom}({a.matricule})</option>
+                               
+                            )})}
+                            </select>
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='civilite' className="label">Groupe option filliere</label>
+                            <select  onChange={(e)=>{if(e.target.value=="reset"){      axiosClient.get('/groupe').then((a)=>{
+                                        setgroupes(a.data)
+                                        setgroupesel(a.data)
+                                        return
+                                    })};setgroupesel([...groupesel.filter(a=>a.option_filieres_id==e.target.value)])}} className="formInput">
+                                <option value={"reset"} selected>Selectionnez un Module (annuler filtre)</option>
+                               {optionfillieres.map((a)=>{return(<option value={a.id}>{a.codeOptionFiliere}</option>
                                
                             )})}
                             </select>

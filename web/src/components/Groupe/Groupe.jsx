@@ -23,6 +23,7 @@ export default function Groupe() {
     const [editVisible2, setEditVisible2] = useState(false);
     const [error, seterror] = useState()
     const toast = useRef(null);
+    const [optionsfilieres,setoptionfilieres]=useState([]);
     const [editgroupe, setEditgroupe] = useState({});
     const [groupes, setgroupes] = useState([])
     const [selectedgroupes, setSelectedgroupes] = useState(null);
@@ -120,6 +121,7 @@ console.log(a.data)
     useEffect(() => {
         axiosClient.get('/sanctum/csrf-cookie')
       load()
+      axiosClient.get('/option-filieres').then(a=>setoptionfilieres(a.data))
       axiosClient.get('/filieres').then((ele)=>{
             setfilieres(ele.data)
             console.log(ele.data)
@@ -254,16 +256,22 @@ console.log(a.data)
                             <input type="text" id='prenom' name={groupe?.typegroupe=="distanciel"?"libelleGroupeDS":"libelleGroupePR"} onChange={handleChange}
                                    className="formInput"/>
                         </div>
+                    
                         <div className="maindiv2">
-                            <label htmlFor='prenom' className="label"> Code Option Filiere</label>
-                            <input type="text" id='prenom' name='groupeCodeOptionFiliere' onChange={handleChange}
-                                   className="formInput"/>
+                            <label htmlFor='civilitea' className="label">Code option filliere</label>
+                            <select id='civilitea' name='groupeCodeOptionFiliere' onChange={handleChange} className="formInput">
+                                <option disabled selected>Selectionnez option filliere</option>
+                               {optionsfilieres.map((a)=>{return(<option value={a.id} style={{color:"black"}}>{a.codeOptionFiliere}</option>
+                               
+                            )})}
+                            
+                            </select>
                         </div>
                         <div className="maindiv2">
                             <label htmlFor='civilite' className="label">Filiere</label>
                             <select id='civilite' name='option_filieres_id' onChange={handleChange} className="formInput">
                                 <option disabled selected>Selectionnez une civilité</option>
-                               {filieres.map((a)=>{return(<option value={a.codeFiliere}>{a.libelleFiliere}</option>
+                               {filieres.map((a)=>{return(<option value={a.id}>{a.libelleFiliere}</option>
                                
                             )})}
                             
@@ -319,7 +327,7 @@ console.log(a.data)
                 <select id='civilite' name='option_filieres_id' value={editgroupe?.option_filieres_id || ''} onChange={(e)=>handleChange(e,true)} className="formInput">
                     <option disabled selected>Selectionnez une civilité</option>
                     {filieres.map((a) => (
-                        <option value={a.codeFiliere} key={a.codeFiliere}>{a.libelleFiliere}</option>
+                        <option value={a.id} key={a.id}>{a.libelleFiliere}</option>
                     ))}
                 </select>
             </div>

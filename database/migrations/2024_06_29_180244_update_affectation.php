@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::table('groupe_physique',function(Blueprint $table){
-        $table->string('groupeCodeOptionFiliere');
-        $table->integer('option_filieres_id');
-        $table->foreign('option_filieres_id')->references('id')->on('option_filieres')->
-        onUpdate('cascade')->onDelete('cascade');
-    });
+        Schema::table('affectations_formodgr',function(Blueprint $table){
+        $table->unique([    'matricule',
+        'idModule',
+        'idGroupePhysique']);
+         });
     }
 
     /**
