@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formateur;
-use App\Models\FormateurPermanent;
 use Illuminate\Http\Request;
+use App\Models\FormateurPermanent;
 
 class FormateurController extends Controller
 {
@@ -23,7 +23,12 @@ class FormateurController extends Controller
     {
         //
     }
-
+    public function countaffect(Request $request)
+    {
+        $formater=Formateur::find($request->matricule);
+        $f=$formater::withCount(['affectations as total'])->get();
+        return response()->json();
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -46,6 +51,7 @@ class FormateurController extends Controller
         $formateur->Diplome = $request->Diplome;
         $formateur->situationFamiliale = $request->situationFamiliale;
         $formateur->MasseHoaraireHeb = $request->MasseHoaraireHeb;
+        $formateur->MasseHoaraireHebinit = $request->MasseHoaraireHeb;
         $formateur->Filiere = $request->Filiere;
         $formateur->Categorie = $request->Grade;
         $formateur->idEtablissement = $request->idEtablissement;

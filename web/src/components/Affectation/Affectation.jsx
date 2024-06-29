@@ -207,6 +207,11 @@ useEffect(()=>{
         setmodules(a.data)
     })
 },[])
+const[count,setcount]=useState()
+const[nameprof,setnameprof]=useState();
+const getcount=(matricule,name)=>{
+axiosClient.post("/countaffect",{matricule:matricule}).then((a)=>console.log(a.data))
+}
     return (
         <>
 
@@ -232,12 +237,13 @@ useEffect(()=>{
                         </div>
                         <div className="maindiv2">
                             <label htmlFor='civilite' className="label">Formateur</label>
-                            <select id='civilite' name='matriculeprof' onChange={handleChange} className="formInput">
+                            <select id='civilite' name='matriculeprof' onChange={(e)=>{handleChange(e);getcount(e.target.value,e.target.innerText)}} className="formInput">
                                 <option disabled selected>Selectionnez une formateur</option>
                                {formateurs.map((a)=>{return(<option value={a.matricule}>{a.nom}({a.matricule})</option>
                                
                             )})}
                             </select>
+                           { count?<div style={{color:"gray"}}>cumule heure pour {nameprof} :{count}</div>:""}
                         </div>
                         <div className="maindiv2">
                             <label htmlFor='civilite' className="label">Groupe option filliere</label>

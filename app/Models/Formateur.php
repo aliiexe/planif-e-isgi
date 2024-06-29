@@ -32,7 +32,8 @@ class Formateur extends Model
         'massHorRealiseeAnnuel',
         'Filiere',
         'Categorie',
-        'idEtablissement'
+        'idEtablissement',
+        'MasseHoaraireHebinit'
     ];
 
     public function etablissement()
