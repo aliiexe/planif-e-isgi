@@ -37,7 +37,7 @@ class Formateur extends Model
 
     public function etablissement()
     {
-        return $this->belongsTo(Etablissement::class);
+        return $this->belongsTo(Etablissement::class,"idEtablissement");
     }
     public function affectations(){
         return $this->hasMany(affectation_formodgr::class,"matriculeprof");

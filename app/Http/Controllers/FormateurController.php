@@ -13,7 +13,7 @@ class FormateurController extends Controller
      */
     public function index()
     {
-        return response()->json(Formateur::all());
+        return response()->json(Formateur::with('etablissement')->get());
     }
 
     /**
@@ -51,7 +51,7 @@ class FormateurController extends Controller
         $formateur->idEtablissement = $request->idEtablissement;
         $formateur->save();
 
-        if($request->input('is_permanent')) {
+        if($request->typeformateur == 'is_permanent') {
             $formateurPermanent = new FormateurPermanent();
             $formateurPermanent->Date_Recrutement = $request->Date_Recrutement;
             $formateurPermanent->Date_Depart_Retrait = $request->Date_Depart_Retrait;
@@ -60,6 +60,12 @@ class FormateurController extends Controller
             $formateurPermanent->Grade = $request->Grade;
             $formateurPermanent->matriculeFm = $formateur->matricule;
             $formateurPermanent->save();
+        }else if($request->typeformateur == 'is_vacataire') {
+            // Handle the case for vacataire if needed
+            // For example, you might have another model FormateurVacataire
+            // $formateurVacataire = new FormateurVacataire();
+            // $formateurVacataire->matriculeFm = $formateur->matricule;
+            // $formateurVacataire->save();
         }
 
         return response()->json(['message' => 'Formateur created successfully', 'formateur' => $formateur], 201);

@@ -3,20 +3,27 @@ import { useState } from "react";
 export default function CreateFormateur({formateur, etablissement, handleChange, handleSubmit, situationsFamiliales,diplomes}) {
   const [isVacataire, setIsVacataire] = useState(false);
 
-    const handleVacataireChange = (event) => {
-        setIsVacataire(event.target.value === 'is_vacataire');
-        handleChange(event);
-    };
+  const handleVacataireChange = (event) => {
+    const { value } = event.target;
+    setIsVacataire(value === 'is_vacataire');
+    handleChange(event);
+  };
+
+  const handleCombinedChange = (event) => {
+    handleVacataireChange(event);
+    handleChange(event);
+  };
+
   return (
     <div>
         <div className="mainCheckbox">
             <label htmlFor='is_permanent' className="label">
-                <input type='radio' id='is_permanent' name='is_permanent' value='is_permanent' onChange={handleChange} checked/>
+                <input type='radio' id='is_permanent' name='typeformateur' value={'is_permanent'} onChange={handleCombinedChange} />
                 Permanent
             </label>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <label htmlFor='is_vacataire' className="label">
-                <input type='radio' id='is_vacataire' name='is_permanent' value='is_vacataire' onChange={handleChange}/>
+                <input type='radio' id='is_vacataire' name='typeformateur' value={'is_vacataire'} onChange={handleCombinedChange} />
                 Vacataire
             </label>
         </div>
@@ -119,10 +126,6 @@ export default function CreateFormateur({formateur, etablissement, handleChange,
             </div>
         </div>
         <div>
-            {/* <div className="maindiv2">
-                <label htmlFor='Categorie' className="label">Catégorie</label>
-                <input type="text" id='Categorie' name='Categorie' onChange={handleChange} className="formInput"/>
-            </div> */}
             <div className="maindiv2">
                 <label htmlFor='idEtablissement' className="label">Etablissement</label>
                 <select id='idEtablissement' name='idEtablissement' onChange={handleChange} className="formInput" >
@@ -135,19 +138,29 @@ export default function CreateFormateur({formateur, etablissement, handleChange,
         </div>
         {isVacataire && (
         <div className="grid grid-cols-2 gap-4">
-          date recrutement
-          <input type="date" name='DateRecrutement' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          date retraite
-          <input type="date" name='Date_Depart_Retraite' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          echelon
-          <input type="text" name='Echelon' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          echelle
-          <input type="text" name='Echelle' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          grade
-          <input type="text" name='Grade' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
+          <div>
+            <label htmlFor='DateRecrutement' className="label">Date de recrutement</label>
+            <input type="date" id='DateRecrutement' name='DateRecrutement' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
+          </div>
+          <div>
+            <label htmlFor='Date_Depart_Retraite' className="label">Date de départ à la retraite</label>
+            <input type="date" id='Date_Depart_Retraite' name='Date_Depart_Retraite' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
+          </div>
+          <div>
+            <label htmlFor='Echelon' className="label">Echelon</label>
+            <input type="text" id='Echelon' name='Echelon' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
+          </div>
+          <div>
+            <label htmlFor='Echelle' className="label">Echelle</label>
+            <input type="text" id='Echelle' name='Echelle' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
+          </div>
+          <div>
+            <label htmlFor='Grade' className="label">Grade</label>
+            <input type="text" id='Grade' name='Grade' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
+          </div>
         </div>
-          )}
-            <button type="submit" onClick={handleSubmit} className="add-button">Ajouter</button>
+        )}
+        <button type="submit" onClick={handleSubmit} className="add-button">Ajouter</button>
     </div>
   )
 }
