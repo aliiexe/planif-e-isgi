@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\groupe_physique;
-use App\Http\Requests\Storegroupe_physiqueRequest;
 use Illuminate\Http\Request;
-
+use App\Models\groupe_physique;
+use App\Models\groupe_distanciel;
+use App\Models\groupe_presentiel;
+use App\Http\Requests\Storegroupe_physiqueRequest;
 class GroupePhysiqueController extends Controller
 {
     /**
@@ -14,6 +15,33 @@ class GroupePhysiqueController extends Controller
     public function index()
     {
         return response()->json(groupe_physique::all());
+    }
+
+    public function editgroupe(Request $request){
+       if($request->type=="pres"){
+        $groupe=groupe_presentiel::where('codeGroupePR',"=",$request->codeGroupePR)->first();
+        $groupe->groupeCodeOptionFiliere=$request->groupeCodeOptionFiliere;
+        $groupe->libelleGroupePR=$request->libelleGroupePR;
+        $groupe->option_filieres_id=$request->option_filieres_id;
+        $groupe->save();
+        return response()->json($groupe);                     
+       }else{
+        $groupe=groupe_distanciel::where('codeGroupeDS',"=",$request->codeGroupeDS)->first();
+            $groupe->groupeCodeOptionFiliere = $request->groupeCodeOptionFiliere;
+            $groupe->libelleGroupeDS = $request->libelleGroupeDS;
+            $groupe->option_filieres_id = $request->option_filieres_id;
+            $groupe->save();
+            return response()->json($groupe);
+        
+       }
+    }
+
+    public function choose(Request $request){
+        if($request->type=="presentiel"){
+            return response()->json(groupe_physique::all());
+        }else{
+            return response()->json(groupe_distanciel::all());
+        }
     }
 
     /**
@@ -29,7 +57,31 @@ class GroupePhysiqueController extends Controller
      */
     public function store(Request $request)
     {
-        groupe_physique::create($request->all());
+        if($request->typegroupe=="distanciel"){
+            $data = $request->only([
+                'codeGroupeDS',
+                'libelleGroupeDS',
+                'groupeCodeOptionFiliere',
+                'option_filieres_id',
+                'groupePres1',
+                'groupePres2'
+            ]);
+            $groupe_dis=new groupe_distanciel($data);
+            $groupe_dis->save();
+        }else{ 
+            $data = $request->only([
+                'codeGroupePR',
+                'libelleGroupePR',
+                'groupeCodeOptionFiliere',
+                'option_filieres_id',
+            ]);
+            $groupe_pre=new groupe_presentiel($data);
+            $groupe_pre->save();
+            
+            groupe_physique::create(["libelleGroupe"=>$request->libelleGroupePR,"codeGroupePhysique"=>$request->codeGroupePR,
+        "groupeCodeOptionFiliere"=>$request->groupeCodeOptionFiliere,'option_filieres_id'=>$request->groupeCodeOptionFiliere]);
+        }
+        
         return response()->json("created");
     }
 
@@ -67,10 +119,16 @@ class GroupePhysiqueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function groupedel(Request $request)
     {
-        $groupe_physique=groupe_physique::find($id);
-        $groupe_physique->delete();
-        return response()->json("dlee");
+  
+        if($request->type=="presentiel"){
+            $groupe=groupe_presentiel::where('codeGroupePR',"=",$request->codeGroupePR)->first();
+            $groupe->delete();
+        return response()->json("dlee");}else{
+            $groupe=groupe_distanciel::where('codeGroupeDS',"=",$request->codeGroupeDS)->first();
+            $groupe->delete();
+            return response()->json("dlee");
+        }
     }
 }

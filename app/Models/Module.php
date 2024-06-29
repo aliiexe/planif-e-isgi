@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Module extends Model
 {
@@ -19,7 +19,9 @@ class Module extends Model
         'option_filieres_id',
         'semestreModule',
     ];
-
+    public function affectations(){
+        return $this->hasMany(affectation_formodgr::class,"idModule");
+    }
     /**
      * Get the option filiere that owns the module.
      */

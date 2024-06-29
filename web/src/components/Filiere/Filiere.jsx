@@ -8,7 +8,6 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
-
 import { Toast } from 'primereact/toast';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
@@ -18,7 +17,7 @@ export default function Filiere() {
   const [selectedFiliere, setSelectedFiliere] = useState([]);
   const [filieres, setFilieres] = useState([]);
   const [filiere, setFiliere] = useState({ codeFiliere: '', libelleFiliere: '' });
-  const [editFiliere, setEditFiliere] = useState({ codeFiliere: '', libelleFiliere: '' });
+  const [editFiliere, setEditFiliere] = useState({ id: '', codeFiliere: '', libelleFiliere: '' });
   const [loading, setLoading] = useState(true);
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const toast = useRef(null);
@@ -47,7 +46,8 @@ export default function Filiere() {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      await axiosClient.put(`/filieres/${editFiliere.codeFiliere}`, editFiliere);
+      console.log("URL de la requête PUT:", `/filieres/${editFiliere.id}`);
+      await axiosClient.put(`/filieres/${editFiliere.id}`, editFiliere);
       setEditVisible(false);
       toast.current.show({ severity: 'success', summary: 'Succès', detail: 'La filière est mise à jour avec succès' });
       fetchFilieres();
@@ -64,7 +64,7 @@ export default function Filiere() {
       accept: async () => {
         try {
           await Promise.all(
-            selectedFiliere.map(filiere => axiosClient.delete(`/filieres/${filiere.codeFiliere}`))
+            selectedFiliere.map(filiere => axiosClient.delete(`/filieres/${filiere.id}`))
           );
           toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Les filières ont été supprimées avec succès' });
           fetchFilieres();
@@ -109,9 +109,9 @@ export default function Filiere() {
             )}
           </div>
           <IconField iconPosition="left">
-                    <InputIcon className="pi pi-search" />
-                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Recherche" />
-                </IconField>
+            <InputIcon className="pi pi-search" />
+            <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Recherche" />
+          </IconField>
         </div>
       </div>
     );
@@ -150,6 +150,10 @@ export default function Filiere() {
         <Dialog header="Modifier une filière" visible={editVisible} style={{ width: '50vw' }} onHide={() => setEditVisible(false)}>
           <form onSubmit={handleEdit}>
             <div className="field">
+              <label htmlFor='editCodeFiliere' className="label">Code Filière</label>
+              <InputText id='editCodeFiliere' name='codeFiliere' value={editFiliere.codeFiliere} onChange={(e) => handleChange(e, true)} className="formInput" />
+            </div>
+            <div className="field">
               <label htmlFor='editLibelleFiliere' className="label">Libellé Filière</label>
               <InputText id='editLibelleFiliere' name='libelleFiliere' value={editFiliere.libelleFiliere} onChange={(e) => handleChange(e, true)} className="formInput" />
             </div>
@@ -165,7 +169,7 @@ export default function Filiere() {
             value={filieres}
             paginator
             rows={10}
-            dataKey="codeFiliere"
+            dataKey="id"
             scrollable
             scrollHeight="64vh"
             sortMode="multiple"

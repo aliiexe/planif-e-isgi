@@ -47,10 +47,12 @@ class FiliereController extends Controller
         $filiere = Filiere::findOrFail($id);
 
         $validatedData = $request->validate([
+            'codeFiliere' => 'sometimes|required|string|unique:filieres,codeFiliere,' . $filiere->id,
             'libelleFiliere' => 'sometimes|required|string|max:255',
         ]);
 
-        $filiere->update($validatedData);
+        $filiere->fill($validatedData)->save();
+
         return response()->json($filiere);
     }
 

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Formateur extends Model
 {
@@ -38,6 +38,9 @@ class Formateur extends Model
     public function etablissement()
     {
         return $this->belongsTo(Etablissement::class);
+    }
+    public function affectations(){
+        return $this->hasMany(affectation_formodgr::class,"matriculeprof");
     }
 
 
