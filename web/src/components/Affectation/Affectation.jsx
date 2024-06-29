@@ -114,9 +114,7 @@ export default function Affectation() {
                     summary: 'Succès',
                     detail: 'Le Affectation est inséré avec succès'
                 });
-            }).catch(err=>{                
-                seterror(err.response.data)}
-            )
+            })
             console.log(response)
           
         }

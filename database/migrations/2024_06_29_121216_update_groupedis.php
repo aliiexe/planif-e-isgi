@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('groupe_distanciels',function(Blueprint $table){
-          $table->integer('groupePres1');
-          $table->foreign('groupePres1')->references('id')->on('groupe_physique')->onDelete('cascade');
-          $table->integer('groupePres2');
-          $table->foreign('groupePres2')->references('id')->on('groupe_physique')->onDelete('cascade');
+          $table->unsignedBigInteger('groupePres1');
+          $table->foreign('groupePres1')->references('id')->on('groupe_physique')->onDelete('cascade')->onUpdate('cascade');
+          $table->unsignedBigInteger('groupePres2');
+          $table->foreign('groupePres2')->references('id')->on('groupe_physique')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

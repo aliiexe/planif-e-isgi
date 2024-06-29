@@ -12,6 +12,7 @@ import OptionFiliere from './components/Filiere/OptionFiliere';
 import Module from './components/Module/Module';
 import Affectation from './components/Affectation/Affectation';
 
+// import Side from './components/SideBar/Side';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
     <Router>
       <div className="app">
         <Sidebar/>
+        {/* <Side/> */}
         <div className="content">
           <Routes>
             <Route path="/formateurs" element={<Formateur />} />

@@ -22,7 +22,7 @@ class Etablissement extends Model
 
     public function formateurs()
     {
-        return $this->hasMany(Formateur::class);
+        return $this->hasMany(Formateur::class,"idEtablissement");
     }
 
     

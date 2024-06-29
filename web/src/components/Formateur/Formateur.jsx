@@ -45,7 +45,6 @@ export default function Formateur() {
         Grade: '',
         Diplome: '',
         Filiere: '',
-        Categorie: '',
         situationFamiliale: '',
         MasseHoaraireHeb: '',
         idEtablissement: '',
@@ -80,7 +79,6 @@ export default function Formateur() {
     ];
 
     const diplomes = [
-      { name: "" },
       { name: "Baccalauréat Général" },
       { name: "Baccalauréat Technique" },
       { name: "Baccalauréat Professionnel" },
@@ -120,14 +118,14 @@ export default function Formateur() {
             accept: async () => {
                 selectedFormateurs.map(async (a) => {
                     const response = await axiosClient.delete(`/formateur/${a.matricule}`).then((a) => {
-                        console.log(a)
-                        toast.current.show({
-                            severity: 'success',
-                            summary: 'Succès',
-                            detail: 'Le formateur est supprimé avec succès'
-                        });
                         getFormateurs()
+                        console.log(a)
                     })
+                    toast.current.show({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Le formateur est supprimé avec succès'
+                    });
                     console.log(response)
                 })
             },
@@ -236,7 +234,7 @@ export default function Formateur() {
                   header={header}
                   loading={loading}
                   globalFilter={globalFilterValue}
-                  globalFilterFields={['nom', 'prenom', 'matricule', 'numTel', 'Adresse', 'Echelle', 'Echelon', 'Date_Recrutement', 'dateNaissance', 'Date_Depart_Retrait', 'Grade', 'Diplome', 'Filiere', 'Categorie', 'situationFamiliale', 'MasseHoaraireHeb', 'idEtablissement']}
+                  globalFilterFields={['nom', 'prenom', 'matricule', 'numTel', 'Adresse', 'Echelle', 'Echelon', 'Date_Recrutement', 'dateNaissance', 'Date_Depart_Retrait', 'Grade', 'Diplome', 'Filiere', 'situationFamiliale', 'MasseHoaraireHeb', 'idEtablissement']}
                   selectionMode="multiple"
                   selection={selectedFormateurs} 
                   onSelectionChange={(e) => setSelectedFormateurs(e.value)}
@@ -255,10 +253,10 @@ export default function Formateur() {
                       <Column sortable style={{ minWidth: '15rem' }} field="Grade" header="Grade"></Column>
                       <Column sortable style={{ minWidth: '15rem' }} field="Diplome" header="Diplome"></Column>
                       <Column sortable style={{ minWidth: '15rem' }} field="Filiere" header="Filiere"></Column>
-                      <Column sortable style={{ minWidth: '15rem' }} field="Categorie" header="Categorie"></Column>
+                      {/* <Column sortable style={{ minWidth: '15rem' }} field="Categorie" header="Categorie"></Column> */}
                       <Column sortable style={{ minWidth: '15rem' }} field="situationFamiliale" header="Situation Familiale"></Column>
                       <Column sortable style={{ minWidth: '15rem' }} field="MasseHoaraireHeb" header="Masse Hoaraire Hebdomadaire"></Column>
-                      <Column sortable style={{ minWidth: '15rem' }} field="idEtablissement" header="Etablissement"></Column>
+                      <Column sortable style={{ minWidth: '15rem' }} field="etablissement.NomEtablissement" header="Etablissement"></Column>
                   </DataTable>
                 </div>
                 <Toast ref={toast}/>

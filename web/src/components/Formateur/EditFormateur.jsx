@@ -24,14 +24,10 @@ export default function EditFormateur({handleChange, handleEdit, formateur, dipl
             </div>
         </div>
 
-        <div className="maindiv2-container">
+        <div className="maindiv2">
             <div className="maindiv2">
                 <label htmlFor='numTel' className="label">Numéro de téléphone</label>
                 <input type="text" id='numTel' name='numTel' value={formateur?.numTel} onChange={handleChange} className="formInput"/>
-            </div>
-            <div className="maindiv2">
-                <label htmlFor='email' className="label">Email</label>
-                <input type="email" id='email' name='email' value={formateur?.email} onChange={handleChange} className="formInput"/>
             </div>
         </div>
 
