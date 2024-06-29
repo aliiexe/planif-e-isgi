@@ -47,7 +47,7 @@ class FormateurController extends Controller
         $formateur->situationFamiliale = $request->situationFamiliale;
         $formateur->MasseHoaraireHeb = $request->MasseHoaraireHeb;
         $formateur->Filiere = $request->Filiere;
-        $formateur->Categorie = $request->Categorie;
+        $formateur->Categorie = $request->Grade;
         $formateur->idEtablissement = $request->idEtablissement;
         $formateur->save();
 

@@ -9,14 +9,9 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
-
-
-
-import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
-import { confirmDialog } from 'primereact/confirmdialog'; // For confirmDialog method
+import { ConfirmDialog } from 'primereact/confirmdialog';
+import { confirmDialog } from 'primereact/confirmdialog';
         
-
-
 export default function Groupe() {
     const [visible, setVisible] = useState(false);
     const [editVisible, setEditVisible] = useState(false);
@@ -229,10 +224,10 @@ console.log(a.data)
                   selection={selectedgroupes} 
                   onSelectionChange={(e) => setSelectedgroupes(e.value)}
                   >
-                      <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                      <Column sortable style={{ minWidth: '15rem' }} field="libelleGroupe" header="Libelle groupe"></Column>
-                      <Column sortable style={{ minWidth: '15rem' }} field="codeGroupePhysique" header="Code groupe"></Column>
-
+                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="libelleGroupe" header="Libelle groupe"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="codeGroupePhysique" header="Code groupe"></Column>
+                    <Column header='Type groupe'></Column>
                   </DataTable>
                 </div>
                 <Toast ref={toast}/>

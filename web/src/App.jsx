@@ -10,7 +10,7 @@ import Groupe from './components/Groupe/Groupe';
 import Filiere from './components/Filiere/Filiere';
 import OptionFiliere from './components/Filiere/OptionFiliere';
 import Module from './components/Module/Module';
-
+// import Side from './components/SideBar/Side';
 
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
     <Router>
       <div className="app">
         <Sidebar/>
+        {/* <Side/> */}
         <div className="content">
           <Routes>
             <Route path="/formateurs" element={<Formateur />} />

@@ -1,15 +1,24 @@
+import { useState } from "react";
+
 export default function CreateFormateur({formateur, etablissement, handleChange, handleSubmit, situationsFamiliales,diplomes}) {
+  const [isVacataire, setIsVacataire] = useState(false);
+
+    const handleVacataireChange = (event) => {
+        setIsVacataire(event.target.value === 'is_vacataire');
+        handleChange(event);
+    };
   return (
     <div>
         <div className="mainCheckbox">
             <label htmlFor='is_permanent' className="label">
-                <input type='radio' id='is_permanent' name='is_permanent' onChange={handleChange}/>Permanent
-            </label>&nbsp;&nbsp;&nbsp;&nbsp;
-            <label htmlFor='is_vacataire' className="label">
-                <input type='radio' id='is_vacataire' name='is_vacataire' onChange={handleChange}/>Vacataire
+                <input type='radio' id='is_permanent' name='is_permanent' value='is_permanent' onChange={handleChange} checked/>
+                Permanent
             </label>
-            {/* <label htmlFor='is_permanent' className="label">Permanent</label>
-            <input type="checkbox" id='is_permanent' name='is_permanent' onChange={handleChange}/> */}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <label htmlFor='is_vacataire' className="label">
+                <input type='radio' id='is_vacataire' name='is_permanent' value='is_vacataire' onChange={handleChange}/>
+                Vacataire
+            </label>
         </div>
         <div className="maindiv2-container">
             <div className="maindiv2">
@@ -39,7 +48,7 @@ export default function CreateFormateur({formateur, etablissement, handleChange,
             <div className="maindiv2">
                 <label htmlFor='civilite' className="label">Civilité</label>
                 <select id='civilite' name='civilite' onChange={handleChange} className="formInput">
-                    <option disabled>Selectionnez une civilité</option>
+                    <option disabled selected>Selectionnez une civilité</option>
                     <option value='M'>Monsieur</option>
                     <option value='Mme'>Madame</option>
                 </select>
@@ -83,7 +92,7 @@ export default function CreateFormateur({formateur, etablissement, handleChange,
             <div className="maindiv2">
                 <label htmlFor='Diplome' className="label">Diplôme</label>
                 <select id='Diplome' name='Diplome' onChange={handleChange} className="formInput">
-                    <option disabled>Selectionnez un diplôme</option>
+                    <option disabled selected>Selectionnez un diplôme</option>
                     {diplomes.map((a) => {
                         return (<option key={a.name} value={a.name}>{a.name}</option>)
                     })}
@@ -92,7 +101,7 @@ export default function CreateFormateur({formateur, etablissement, handleChange,
             <div className="maindiv2">
                 <label htmlFor='situationFamiliale' className="label">Situation familiale</label>
                 <select id='situationFamiliale' name='situationFamiliale' onChange={handleChange} className="formInput">
-                    <option disabled>Selectionnez une situation familiale</option>
+                    <option disabled selected>Selectionnez une situation familiale</option>
                     {situationsFamiliales.map((a) => {
                         return (<option key={a.name} value={a.name}>{a.name}</option>)
                     })}
@@ -109,23 +118,22 @@ export default function CreateFormateur({formateur, etablissement, handleChange,
                 <input type="text" id='Filiere' name='Filiere' onChange={handleChange} className="formInput"/>
             </div>
         </div>
-        <div className="maindiv2-container">
-            <div className="maindiv2">
+        <div>
+            {/* <div className="maindiv2">
                 <label htmlFor='Categorie' className="label">Catégorie</label>
                 <input type="text" id='Categorie' name='Categorie' onChange={handleChange} className="formInput"/>
-            </div>
+            </div> */}
             <div className="maindiv2">
                 <label htmlFor='idEtablissement' className="label">Etablissement</label>
-                <select id='idEtablissement' name='idEtablissement' onChange={handleChange} className="formInput" value={formateur.idEtablissement || ''}>
-                    <option disabled>Selectionnez un etablissement</option>
-                    <option ></option>
+                <select id='idEtablissement' name='idEtablissement' onChange={handleChange} className="formInput" >
+                    <option disabled selected>Selectionnez un etablissement</option>
                     {etablissement.map((a) => {
                         return (<option key={a.id} value={a.id}>{a.NomEtablissement}</option>)
                     })}
                 </select>
             </div>
         </div>
-        {formateur.is_vacataire && (
+        {isVacataire && (
         <div className="grid grid-cols-2 gap-4">
           date recrutement
           <input type="date" name='DateRecrutement' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
