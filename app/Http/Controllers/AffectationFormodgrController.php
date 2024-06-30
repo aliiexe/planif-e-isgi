@@ -41,7 +41,7 @@ class AffectationFormodgrController extends Controller
             $heure = round($heureprof / $countaffec* 2) / 2;
             affectation_formodgr::create(["semaineAnneeFormation"=>"20222023",
         "dateEFMPre"=>date('Y-m-d'),'dateEFMReal'=>date('Y-m-d'),'matriculeprof'=>$request->matriculeprof,
-        "idGroupePhysique"=>$request->idGroupePhysique,"matricule"=>uniqid(),"idModule"=>$request->idModule
+        "idGroupePhysique"=>$request->idGroupePhysique,"matricule"=>$request->matriculeprof,"idModule"=>$request->idModule
         ,"heureSemaine"=>$heure]);
             $formateur->save();
             affectation_formodgr::where('matriculeprof',$request->matriculeprof)
@@ -56,7 +56,7 @@ class AffectationFormodgrController extends Controller
             affectation_formodgr::create(["semaineAnneeFormation"=>"20222023",
             "dateEFMPre"=>date('Y-m-d'),'dateEFMReal'=>date('Y-m-d'),'matriculeprof'=>$request->matriculeprof,
             "idGroupePhysique"=>$request->idGroupePhysique,
-             "heureSemaine"=>$heure,"matricule"=>uniqid(),"idModule"=>$request->idModule]);
+             "heureSemaine"=>$heure,"matricule"=>$request->matriculeprof,"idModule"=>$request->idModule]);
             $formateur->save();
             affectation_formodgr::where('matriculeprof',$request->matriculeprof)
             ->where('idModule',$request->idModule)->update(["heureSemaine"=>$heure]);
@@ -92,8 +92,10 @@ class AffectationFormodgrController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(affectation_formodgr $affectation_formodgr)
+    public function destroy($id)
     {
-        //
+        $affectation = affectation_formodgr::find($id);
+        $affectation->delete();
+        return response()->json("affectation supprimée avec succès");
     }
 }

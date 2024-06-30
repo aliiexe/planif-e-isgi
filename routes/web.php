@@ -25,6 +25,7 @@ use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\OptionFiliereController;
 use App\Http\Controllers\GroupePhysiqueController;
 use App\Http\Controllers\AffectationFormodgrController;
+use App\Http\Controllers\AnneeFormationController;
 
 Route::resource('etablissement',EtablissementController::class);
 Route::resource('groupe',GroupePhysiqueController::class);
@@ -43,3 +44,5 @@ Route::post('/importetab', [ImportEtablissementController::class, 'import'])->na
 Route::post('/importmod', [ModuleImportController::class, 'import'])->name('import.mod.action');
 Route::post('/importform', [FormateurImportController::class, 'import'])->name('import.form.action');
 Route::post('/countaffect',[FormateurController::class,'countaffect']);
+
+Route::resource('/anneeformation',AnneeFormationController::class);

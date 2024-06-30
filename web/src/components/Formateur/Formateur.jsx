@@ -255,8 +255,8 @@ export default function Formateur() {
                       <Column sortable style={{ minWidth: '15rem' }} field="Filiere" header="Filiere"></Column>
                       {/* <Column sortable style={{ minWidth: '15rem' }} field="Categorie" header="Categorie"></Column> */}
                       <Column sortable style={{ minWidth: '15rem' }} field="situationFamiliale" header="Situation Familiale"></Column>
-                      <Column sortable style={{ minWidth: '15rem' }} field="MasseHoaraireHeb" header="Masse Hoaraire Hebdomadaire restante"></Column>
                       <Column sortable style={{ minWidth: '15rem' }} field="MasseHoaraireHebinit" header="Masse Hoaraire Hebdomadaire initiale"></Column>
+                      <Column sortable style={{ minWidth: '15rem' }} field="MasseHoaraireHeb" header="Masse Hoaraire Hebdomadaire restante"></Column>
                       <Column sortable style={{ minWidth: '15rem' }} field="etablissement.NomEtablissement" header="Etablissement"></Column>
                   </DataTable>
                 </div>
