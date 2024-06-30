@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-      
-            Schema::table('formateurs',function(Blueprint $table){
-            $table->float("MasseHoaraireHebinit");});
+     Schema::table("affectations_formodgr",function(Blueprint $table){
+        $table->float('heureSemaine');
+     });
     }
 
     /**

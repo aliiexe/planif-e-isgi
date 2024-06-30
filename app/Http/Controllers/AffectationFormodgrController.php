@@ -35,16 +35,30 @@ class AffectationFormodgrController extends Controller
         $formateur=Formateur::where("matricule","=",$request->matriculeprof)->first();
         if($formateur->MasseHoaraireHeb>2.5){
             $formateur->MasseHoaraireHeb=$formateur->MasseHoaraireHeb/2;
+            $heureprof=$formateur->MasseHoaraireHebinit;
+            $countaffec=affectation_formodgr::where('matriculeprof',$request->matriculeprof)
+            ->where('idModule',$request->idModule)->count()+1;
+            $heure=$heureprof/$countaffec;
             affectation_formodgr::create(["semaineAnneeFormation"=>"20222023",
         "dateEFMPre"=>date('Y-m-d'),'dateEFMReal'=>date('Y-m-d'),'matriculeprof'=>$request->matriculeprof,
-        "idGroupePhysique"=>$request->idGroupePhysique,"matricule"=>uniqid(),"idModule"=>$request->idModule]);
+        "idGroupePhysique"=>$request->idGroupePhysique,"matricule"=>uniqid(),"idModule"=>$request->idModule
+        ,"heureSemaine"=>$heure]);
             $formateur->save();
-        }elseif($formateur->MasseHoaraireHeb==2.5){
+            affectation_formodgr::where('matriculeprof',$request->matriculeprof)
+            ->where('idModule',$request->idModule)->update(["heureSemaine"=>$heure]);
+        }elseif($formateur->MasseHoaraireHeb<=2.5){
             $formateur->MasseHoaraireHeb=0;
+            $heureprof=$formateur->MasseHoaraireHebinit;
+            $countaffec=affectation_formodgr::where('matriculeprof',$request->matriculeprof)
+            ->where('idModule',$request->idModule)->count()+1;
+            $heure=$heureprof/$countaffec+1;
             affectation_formodgr::create(["semaineAnneeFormation"=>"20222023",
             "dateEFMPre"=>date('Y-m-d'),'dateEFMReal'=>date('Y-m-d'),'matriculeprof'=>$request->matriculeprof,
-            "idGroupePhysique"=>$request->idGroupePhysique,"matricule"=>uniqid(),"idModule"=>$request->idModule]);
+            "idGroupePhysique"=>$request->idGroupePhysique,
+             "heureSemaine"=>$heure,"matricule"=>uniqid(),"idModule"=>$request->idModule]);
             $formateur->save();
+            affectation_formodgr::where('matriculeprof',$request->matriculeprof)
+            ->where('idModule',$request->idModule)->update(["heureSemaine"=>$heure]);
         }else{
             return response()->json("formateur a arriver au maximum des affectations par rapport a ses masse horaire hebdomadaire",500);
         }
