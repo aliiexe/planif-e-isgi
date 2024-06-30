@@ -141,7 +141,7 @@ axiosClient.get('/affectation').then((a)=>setAffectations(a.data))
             icon: 'pi pi-exclamation-triangle',
             accept: async () => {
                 selectedAffectations.map(async (a) => {
-                    const response = await axiosClient.post('/Affectationdel',{codeAffectationPR:a.codeAffectationPR}).then((ala) => {
+                    const response = await axiosClient.delete(`/affectation/${a.id}`).then((ala) => {
                         console.log(ala.data)
                         toast.current.show({
                             severity: 'success',
@@ -151,7 +151,7 @@ axiosClient.get('/affectation').then((a)=>setAffectations(a.data))
                         load()
                         setSelectedAffectations(null)
                     })
-                 
+                    console.log(response)
             })
             },
             reject: () => {
@@ -305,7 +305,7 @@ axiosClient.post("/countaffect",{matricule:matricule}).then((a)=>console.log(a.d
                     value={Affectations}
                     paginator
                     rows={10}
-                    dataKey="codeAffectationPR"
+                    dataKey="id"
                     scrollable
                     scrollHeight="64vh"
                     sortMode="multiple"
@@ -313,15 +313,13 @@ axiosClient.post("/countaffect",{matricule:matricule}).then((a)=>console.log(a.d
                     className='AffectationsTable'
                     emptyMessage="Pas de Affectations trouvés."
                     header={header}
-             
                     globalFilter={globalFilterValue}
-                    globalFilterFields={['codeAffectationPR', 'AffectationCodeOptionFiliere', 'option_filieres_id']}
+                    globalFilterFields={['id', 'AffectationCodeOptionFiliere', 'option_filieres_id']}
                     selectionMode="multiple"
                     selection={selectedAffectations}
                     onSelectionChange={(e) => setSelectedAffectations(e.value)}
                 >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-
                     <Column sortable style={{ minWidth: '15rem' }} field="formateur.nom" header="nom formateur"></Column>
                     <Column sortable style={{ minWidth: '15rem' }} field="formateur.prenom" header="prenom formateur"></Column>
                     <Column sortable style={{ minWidth: '15rem' }} field="groupe.libelleGroupe" header="libelle groupe"></Column>
