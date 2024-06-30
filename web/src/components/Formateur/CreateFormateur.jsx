@@ -137,29 +137,129 @@ export default function CreateFormateur({formateur, etablissement, handleChange,
             </div>
         </div>
         {isVacataire && (
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor='DateRecrutement' className="label">Date de recrutement</label>
-            <input type="date" id='DateRecrutement' name='DateRecrutement' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          </div>
-          <div>
-            <label htmlFor='Date_Depart_Retraite' className="label">Date de départ à la retraite</label>
-            <input type="date" id='Date_Depart_Retraite' name='Date_Depart_Retraite' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          </div>
-          <div>
-            <label htmlFor='Echelon' className="label">Echelon</label>
-            <input type="text" id='Echelon' name='Echelon' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          </div>
-          <div>
-            <label htmlFor='Echelle' className="label">Echelle</label>
-            <input type="text" id='Echelle' name='Echelle' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          </div>
-          <div>
-            <label htmlFor='Grade' className="label">Grade</label>
-            <input type="text" id='Grade' name='Grade' onChange={handleChange} className="p-2 border-2 border-gray-200 rounded-md"/>
-          </div>
+    <div>
+        {/* annee_experience, type, metier, etat, dossier_depose, n_ordre, date_decision, _validation_rrh, apparition_enote, n_ordre,bordereau, date_bordereau, decision, Massehoraireannuelle, massehorarireproposee, dossier_despose_dr */}
+        <div className="maindiv2-container">
+            <div className="maindiv2">
+                <label htmlFor='annee_experience' className="label">Année d&apos;expérience</label>
+                <input type="text" id='annee_experience' name='annee_experience' onChange={handleChange} className="formInput"/>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='type' className="label">Type</label>
+                <input type="text" id='type' name='type' onChange={handleChange} className="formInput"/>
+            </div>
         </div>
-        )}
+        <div className="maindiv2-container">
+            <div className="maindiv2">
+                <label htmlFor='metier' className="label">Métier</label>
+                <input type="text" id='metier' name='metier' onChange={handleChange} className="formInput"/>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='etat' className="label">Etat</label>
+                <div className="radio-container">
+                    <label>
+                        <input type="radio" id='etat_oui' name='etat' value='oui' onChange={handleChange} className="formInput"/> Oui
+                    </label>
+                    <label>
+                        <input type="radio" id='etat_non' name='etat' value='non' onChange={handleChange} className="formInput"/> Non
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div className="maindiv2-container">
+            <div className="maindiv2">
+                <label htmlFor='dossier_depose' className="label">Dossier déposé</label>
+                <div className="radio-container">
+                    <label>
+                        <input type="radio" id='dossier_depose_oui' name='dossier_depose' value='oui' onChange={handleChange} className="formInput"/> Oui
+                    </label>
+                    <label>
+                        <input type="radio" id='dossier_depose_non' name='dossier_depose' value='non' onChange={handleChange} className="formInput"/> Non
+                    </label>
+                </div>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='n_ordre' className="label">N° d&apos;ordre</label>
+                <input type="text" id='n_ordre' name='n_ordre' onChange={handleChange} className="formInput"/>
+            </div>
+        </div>
+        <div className="maindiv2-container">
+            <div className="maindiv2">
+                <label htmlFor='date_decision' className="label">Date de décision</label>
+                <input type="date" id='date_decision' name='date_decision' onChange={handleChange} className="formInput"/>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='_validation_rrh' className="label">Validation RRH</label>
+                <div className="radio-container">
+                    <label>
+                        <input type="radio" id='_validation_rrh_oui' name='_validation_rrh' value='oui' onChange={handleChange} className="formInput"/> Oui
+                    </label>
+                    <label>
+                        <input type="radio" id='_validation_rrh_non' name='_validation_rrh' value='non' onChange={handleChange} className="formInput"/> Non
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div className="maindiv2-container">
+            <div className="maindiv2">
+                <label htmlFor='apparition_enote' className="label">Apparition en note</label>
+                <div className="radio-container">
+                    <label>
+                        <input type="radio" id='apparition_enote_oui' name='apparition_enote' value='oui' onChange={handleChange} className="formInput"/> Oui
+                    </label>
+                    <label>
+                        <input type="radio" id='apparition_enote_non' name='apparition_enote' value='non' onChange={handleChange} className="formInput"/> Non
+                    </label>
+                </div>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='bordereau' className="label">Bordereau</label>
+                <input type="text" id='bordereau' name='bordereau' onChange={handleChange} className="formInput"/>
+            </div>
+        </div>
+        <div className="maindiv2-container">
+            <div className="maindiv2">
+                <label htmlFor='date_bordereau' className="label">Date bordereau</label>
+                <input type="date" id='date_bordereau' name='date_bordereau' onChange={handleChange} className="formInput"/>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='decision' className="label">Décision</label>
+                <div className="radio-container">
+                    <label>
+                        <input type="radio" id='decision_oui' name='decision' value='oui' onChange={handleChange} className="formInput"/> Oui
+                    </label>
+                    <label>
+                        <input type="radio" id='decision_non' name='decision' value='non' onChange={handleChange} className="formInput"/> Non
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div className="maindiv2-container">
+            <div className="maindiv2">
+                <label htmlFor='Massehoraireannuelle' className="label">Masse horaire annuelle</label>
+                <input type="text" id='Massehoraireannuelle' name='Massehoraireannuelle' onChange={handleChange} className="formInput"/>
+            </div>
+            <div className="maindiv2">
+                <label htmlFor='massehorarireproposee' className="label">Masse horaire proposée</label>
+                <input type="text" id='massehorarireproposee' name='massehorarireproposee' onChange={handleChange} className="formInput"/>
+            </div>
+        </div>
+        <div className="maindiv2-container">
+            <div className="maindiv2">
+                <label htmlFor='dossier_despose_dr' className="label">Dossier déposé dr</label>
+                <div className="radio-container">
+                    <label>
+                        <input type="radio" id='dossier_despose_dr_oui' name='dossier_despose_dr' value='oui' onChange={handleChange} className="formInput"/>Oui
+                    </label>
+                    <label>
+                        <input type="radio" id='dossier_despose_dr_non' name='dossier_despose_dr' value='non' onChange={handleChange} className="formInput"/>Non
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+)}
+
         <button type="submit" onClick={handleSubmit} className="add-button">Ajouter</button>
     </div>
   )

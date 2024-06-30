@@ -16,6 +16,7 @@ use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\OptionFiliereController;
 use App\Http\Controllers\GroupePhysiqueController;
 use App\Http\Controllers\AffectationFormodgrController;
+use App\Http\Controllers\AnneeFormationController;
 
 Route::resource('etablissement',EtablissementController::class);
 Route::resource('groupe',GroupePhysiqueController::class);
@@ -28,3 +29,4 @@ Route::post('/choose',[GroupePhysiqueController::class,"choose"]);
 Route::post('/editgroupe',[GroupePhysiqueController::class,"editgroupe"]);
 Route::post('/groupedel',[GroupePhysiqueController::class,"groupedel"]);
 Route::post('/countaffect',[FormateurController::class,'countaffect']);
+Route::resource('/anneeformation',AnneeFormationController::class);

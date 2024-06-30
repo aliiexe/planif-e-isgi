@@ -11,6 +11,7 @@ import Filiere from './components/Filiere/Filiere';
 import OptionFiliere from './components/Filiere/OptionFiliere';
 import Module from './components/Module/Module';
 import Affectation from './components/Affectation/Affectation';
+import Parametres from './components/Parametres/Parametres';
 
 // import Side from './components/SideBar/Side';
 
@@ -30,6 +31,7 @@ function App() {
             <Route path='/optionfilieres' element={<OptionFiliere/>}></Route>
             <Route path='/modules' element={<Module/>}></Route>
             <Route path='/affectation' element={<Affectation></Affectation>}></Route>
+            <Route path='/parametres' element={<Parametres></Parametres>}></Route>
           </Routes>
         </div>
       </div>

@@ -1,0 +1,17 @@
+.input-rows {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10%;
+}
+
+.text {
+    font-family: poppins;
+}
+
+.subtbtn {
+    background-color: #008B45;
+    color: white;
+    border: none;
+    cursor: pointer;
+    height: 50px;
+}
