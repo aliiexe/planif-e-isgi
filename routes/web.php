@@ -42,6 +42,4 @@ Route::post('/importcomp', [ComplexeImportController::class, 'import'])->name('i
 Route::post('/importetab', [ImportEtablissementController::class, 'import'])->name('import.etab.action');
 Route::post('/importmod', [ModuleImportController::class, 'import'])->name('import.mod.action');
 Route::post('/importform', [FormateurImportController::class, 'import'])->name('import.form.action');
-
-
 Route::post('/countaffect',[FormateurController::class,'countaffect']);
