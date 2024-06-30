@@ -60,7 +60,7 @@ class AffectationFormodgrController extends Controller
             $formateur->save();
             affectation_formodgr::where('matriculeprof',$request->matriculeprof)
             ->where('idModule',$request->idModule)->update(["heureSemaine"=>$heure]);
-        }else{
+        }else if($formateur->MasseHoaraireHeb==0){
             return response()->json("formateur a arriver au maximum des affectations par rapport a ses masse horaire hebdomadaire",500);
         }
     }
