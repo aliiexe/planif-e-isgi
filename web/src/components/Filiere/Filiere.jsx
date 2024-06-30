@@ -38,6 +38,7 @@ export default function Filiere() {
       setVisible(false);
       toast.current.show({ severity: 'success', summary: 'Succès', detail: 'La filière est insérée avec succès' });
       fetchFilieres();
+      setFiliere({ codeFiliere: '', libelleFiliere: '' }); // Réinitialiser les valeurs du formulaire
     } catch (error) {
       console.error(error);
     }
@@ -133,7 +134,7 @@ export default function Filiere() {
     <>
       <div className="card flex justify-content-center">
         <Button label="Ajouter une filière" icon="pi pi-plus" onClick={() => setVisible(true)} />
-        <Dialog header="Ajout d'une filière" visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+        <Dialog header="Ajout d'une filière" visible={visible} style={{ width: '50vw' }} onHide={() => { setVisible(false); setFiliere({ codeFiliere: '', libelleFiliere: '' }); }}>
           <form onSubmit={handleSubmit}>
             <div className="field">
               <label htmlFor='codeFiliere' className="label">Code Filière</label>
@@ -146,6 +147,7 @@ export default function Filiere() {
             <Button type="submit" label="Ajouter" className="add-button" />
           </form>
         </Dialog>
+
 
         <Dialog header="Modifier une filière" visible={editVisible} style={{ width: '50vw' }} onHide={() => setEditVisible(false)}>
           <form onSubmit={handleEdit}>

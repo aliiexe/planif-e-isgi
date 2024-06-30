@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('codeOptionFiliere');
             $table->string('libelleOptionFiliere');
-            $table->enum('annee',['2A','3A']);
+            $table->enum('annee', ['1A', '2A', '3A']);
             $table->string('codeFiliere');
             $table->timestamps();
             $table->foreign('codeFiliere')
-                ->references('codeFiliere')
+                ->references('id')
                 ->on('filieres')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+            $table->unique(['codeOptionFiliere', 'annee']); // Contrainte unique composite
         });
-
     }
 
     /**
