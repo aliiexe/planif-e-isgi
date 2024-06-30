@@ -1,7 +1,7 @@
 
 <?php
 
-use App\Http\Controllers\AffectationFormodgrController;
+use App\Models\Formateur;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,11 +9,6 @@ Route::get('/', function () {
 });
 
 // require __DIR__.'/auth.php';
-use App\Http\Controllers\EtablissementController;
-use App\Http\Controllers\FiliereController;
-use App\Http\Controllers\OptionFiliereController;
-use App\Http\Controllers\FormateurController;
-use App\Http\Controllers\GroupePhysiqueController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\ImportFiliereController;
 use App\Http\Controllers\OptionFiliereImportController;
@@ -24,6 +19,12 @@ use App\Http\Controllers\FormateurImportController; // Assurez-vous que cette li
  // Assurez-vous que cette ligne est présente
 
 
+use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\FormateurController;
+use App\Http\Controllers\EtablissementController;
+use App\Http\Controllers\OptionFiliereController;
+use App\Http\Controllers\GroupePhysiqueController;
+use App\Http\Controllers\AffectationFormodgrController;
 
 Route::resource('etablissement',EtablissementController::class);
 Route::resource('groupe',GroupePhysiqueController::class);
@@ -43,3 +44,4 @@ Route::post('/importmod', [ModuleImportController::class, 'import'])->name('impo
 Route::post('/importform', [FormateurImportController::class, 'import'])->name('import.form.action');
 
 
+Route::post('/countaffect',[FormateurController::class,'countaffect']);

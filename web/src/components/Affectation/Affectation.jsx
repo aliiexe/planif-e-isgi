@@ -39,21 +39,28 @@ export default function Affectation() {
      useEffect(()=>{
         getAffectations();
      },[])
+     const [groupesel,setgroupesel]=useState([])
+    
     const handleChange = (e, isEdit = false) => {
-        if(e.target.name=="matriculeprof"){
-            axiosClient.get('/groupe').then((data)=>{
+        if(e.target.name=="matriculeprof" || e.target.name=="idModule"){
+
         
                 console.log(Affectations)
-                console.log(groupes)
+
                 console.log(e.target.value)
-                let toremove=Affectations.filter((ele)=>{return ele.matriculeprof==e.target.value})
+                let toremove=[]
+                if(e.target.name=="matriculeprof"){
+                toremove=Affectations.filter((ele)=>{return ele.matriculeprof==e.target.value})}
+              if(e.target.name=="idModule"){
+                toremove=Affectations.filter((ele)=>{return ele.idModule==e.target.value})}
+      
                 console.log(toremove)
-                let test = data.data.filter(group => 
+                let test = groupes.filter(group => 
                     !toremove.some(affectation => affectation.idGroupePhysique == group.id)
                   );
-                
-                setgroupes(test)
-            })
+              
+                setgroupesel(test)
+     
         
       
         }
@@ -97,14 +104,10 @@ export default function Affectation() {
             return
         } else {
             e.preventDefault();
-            Affectations.map((a) => {
-                if (a.codeAffectationPhysique == Affectation.codeAffectationPhysique) {
-                    seterror('le code de Affectation existe deja')
-                    return
-                }
-            })
+   
             const response = await axiosClient.post('/affectation', Affectation).then((a) => {
                 setVisible(false)
+                load()
                 console.log(a)
                 toast.current.show({
                     severity: 'success',
@@ -113,12 +116,12 @@ export default function Affectation() {
                 });
             })
             console.log(response)
-            load()
+          
         }
     }
     const[filieres,setfilieres]=useState([]);
 const load=()=>{
-
+axiosClient.get('/affectation').then((a)=>setAffectations(a.data))
 }
     useEffect(() => {
         axiosClient.get('/sanctum/csrf-cookie')
@@ -138,7 +141,6 @@ const load=()=>{
             icon: 'pi pi-exclamation-triangle',
             accept: async () => {
                 selectedAffectations.map(async (a) => {
-              
                     const response = await axiosClient.post('/Affectationdel',{codeAffectationPR:a.codeAffectationPR}).then((ala) => {
                         console.log(ala.data)
                         toast.current.show({
@@ -191,17 +193,25 @@ const load=()=>{
 const[modules,setmodules]=useState([]);
 const[groupes,setgroupes]=useState([]);
 const[formateurs,setformateurs]=useState([]);
+const [optionfillieres,setoptionfilliers]=useState([])
 useEffect(()=>{
+    axiosClient.get('/option-filieres').then(a=>setoptionfilliers(a.data))
     axiosClient.get('/formateur').then((a)=>{
         setformateurs(a.data)
     })
     axiosClient.get('/groupe').then((a)=>{
         setgroupes(a.data)
+        setgroupesel(a.data)
     })
     axiosClient.get('/modules').then((a)=>{
         setmodules(a.data)
     })
 },[])
+const[count,setcount]=useState()
+const[nameprof,setnameprof]=useState();
+const getcount=(matricule,name)=>{
+axiosClient.post("/countaffect",{matricule:matricule}).then((a)=>console.log(a.data))
+}
     return (
         <>
 
@@ -216,20 +226,6 @@ useEffect(()=>{
                 }}>
                     <div className="maindiv2-container">
           
-                    <div className="maindiv2">
-                            <label htmlFor='civilite' className="label">Anne formation</label>
-                            <select id='civilite' name='semaineAnneeFormation' onChange={handleChange} className="formInput">
-                                <option disabled selected>Selectionnez un Module</option>
-                               {modules.map((a)=>{return(<option value={"anne2022"}>{a.libelleModule} ({a.codeModule})</option>
-                               
-                            )})}
-                            </select>
-                        </div>
-                        <div className="maindiv2">
-                            <label htmlFor='nom' className="label">Matricule affectation</label>
-                            <input type="text" id='matricule' name='matricule'  onChange={handleChange}
-                                   className="formInput"/>
-                        </div>
                         <div className="maindiv2">
                             <label htmlFor='civilite' className="label">Module</label>
                             <select id='civilite' name='idModule' onChange={handleChange} className="formInput">
@@ -241,9 +237,23 @@ useEffect(()=>{
                         </div>
                         <div className="maindiv2">
                             <label htmlFor='civilite' className="label">Formateur</label>
-                            <select id='civilite' name='matriculeprof' onChange={handleChange} className="formInput">
+                            <select id='civilite' name='matriculeprof' onChange={(e)=>{handleChange(e);getcount(e.target.value,e.target.innerText)}} className="formInput">
                                 <option disabled selected>Selectionnez une formateur</option>
                                {formateurs.map((a)=>{return(<option value={a.matricule}>{a.nom}({a.matricule})</option>
+                               
+                            )})}
+                            </select>
+                           { count?<div style={{color:"gray"}}>cumule heure pour {nameprof} :{count}</div>:""}
+                        </div>
+                        <div className="maindiv2">
+                            <label htmlFor='civilite' className="label">Groupe option filliere</label>
+                            <select  onChange={(e)=>{if(e.target.value=="reset"){      axiosClient.get('/groupe').then((a)=>{
+                                        setgroupes(a.data)
+                                        setgroupesel(a.data)
+                                        return
+                                    })};setgroupesel([...groupesel.filter(a=>a.option_filieres_id==e.target.value)])}} className="formInput">
+                                <option value={"reset"} selected>Selectionnez un Module (annuler filtre)</option>
+                               {optionfillieres.map((a)=>{return(<option value={a.id}>{a.codeOptionFiliere}</option>
                                
                             )})}
                             </select>
@@ -252,20 +262,12 @@ useEffect(()=>{
                             <label htmlFor='civilite' className="label">Groupe</label>
                             <select id='civilite' name='idGroupePhysique' onChange={handleChange} className="formInput">
                                 <option disabled selected>Selectionnez une groupe</option>
-                               {groupes.map((a)=>{return(<option value={a.id}>{a.libelleGroupe}({a.codeGroupePhysique })</option>
+                               {groupesel.map((a)=>{return(<option value={a.id}>{a.libelleGroupe}({a.codeGroupePhysique })</option>
                                
                             )})}
                             </select>
                         </div>
-                        <div className="maindiv2">
-                            <label  className="label">date EFM pre</label>
-                            <input type="date" name='dateEFMPre' onChange={handleChange} className="formInput"/>
                         </div>
-                        <div className="maindiv2">
-                            <label  className="label">date EFM real</label>
-                            <input type="date" name='dateEFMReal' onChange={handleChange} className="formInput"/>
-                        </div>
-                    </div>
                     <div style={{"color": "red"}}>{error}</div>
                     <button type="submit" onClick={handleSubmit} className="add-button">Ajouter</button>
                 </Dialog>
@@ -311,18 +313,19 @@ useEffect(()=>{
                     className='AffectationsTable'
                     emptyMessage="Pas de Affectations trouvés."
                     header={header}
-                    loading={loading}
+             
                     globalFilter={globalFilterValue}
-                    globalFilterFields={['libelleAffectationPR', 'codeAffectationPR', 'AffectationCodeOptionFiliere', 'option_filieres_id']}
+                    globalFilterFields={['codeAffectationPR', 'AffectationCodeOptionFiliere', 'option_filieres_id']}
                     selectionMode="multiple"
                     selection={selectedAffectations}
                     onSelectionChange={(e) => setSelectedAffectations(e.value)}
                 >
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="libelleAffectationPR" header="Libelle Affectation Présentiel"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="codeAffectationPR" header="Code Affectation Présentiel"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="AffectationCodeOptionFiliere" header="Code Option Filiere"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="option_filieres_id" header="ID Option Filiere"></Column>
+
+                    <Column sortable style={{ minWidth: '15rem' }} field="formateur.nom" header="nom formateur"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="formateur.prenom" header="prenom formateur"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="groupe.libelleGroupe" header="libelle groupe"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="module.libelleModule" header="ID Option Filiere"></Column>
                 </DataTable>
            
                 <Toast ref={toast}/>

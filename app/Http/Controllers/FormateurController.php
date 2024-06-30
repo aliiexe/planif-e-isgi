@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formateur;
-use App\Models\FormateurPermanent;
 use Illuminate\Http\Request;
+use App\Models\FormateurPermanent;
 
 class FormateurController extends Controller
 {
@@ -13,7 +13,7 @@ class FormateurController extends Controller
      */
     public function index()
     {
-        return response()->json(Formateur::all());
+        return response()->json(Formateur::with('etablissement')->get());
     }
 
     /**
@@ -23,7 +23,12 @@ class FormateurController extends Controller
     {
         //
     }
-
+    public function countaffect(Request $request)
+    {
+        $formater=Formateur::find($request->matricule);
+        $f=$formater::withCount(['affectations as total'])->get();
+        return response()->json();
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -46,12 +51,13 @@ class FormateurController extends Controller
         $formateur->Diplome = $request->Diplome;
         $formateur->situationFamiliale = $request->situationFamiliale;
         $formateur->MasseHoaraireHeb = $request->MasseHoaraireHeb;
+        $formateur->MasseHoaraireHebinit = $request->MasseHoaraireHeb;
         $formateur->Filiere = $request->Filiere;
-        $formateur->Categorie = $request->Categorie;
-        $formateur->idEtablissement = 1;
+        $formateur->Categorie = $request->Grade;
+        $formateur->idEtablissement = $request->idEtablissement;
         $formateur->save();
 
-        if($request->input('is_permanent')) {
+        if($request->typeformateur == 'is_permanent') {
             $formateurPermanent = new FormateurPermanent();
             $formateurPermanent->Date_Recrutement = $request->Date_Recrutement;
             $formateurPermanent->Date_Depart_Retrait = $request->Date_Depart_Retrait;
@@ -60,6 +66,12 @@ class FormateurController extends Controller
             $formateurPermanent->Grade = $request->Grade;
             $formateurPermanent->matriculeFm = $formateur->matricule;
             $formateurPermanent->save();
+        }else if($request->typeformateur == 'is_vacataire') {
+            // Handle the case for vacataire if needed
+            // For example, you might have another model FormateurVacataire
+            // $formateurVacataire = new FormateurVacataire();
+            // $formateurVacataire->matriculeFm = $formateur->matricule;
+            // $formateurVacataire->save();
         }
 
         return response()->json(['message' => 'Formateur created successfully', 'formateur' => $formateur], 201);

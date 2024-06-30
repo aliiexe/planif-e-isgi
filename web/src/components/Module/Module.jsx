@@ -238,7 +238,10 @@ const loadModules = () => {
                         </div>
                         <div className="maindiv2">
                             <label htmlFor='option_filieres_id' className="label">Option Filieres ID</label>
-                            <Dropdown id='option_filieres_id' name='option_filieres_id' value={formValues.option_filieres_id} options={filiereOptions.map(option => ({ label: option.libelleOptionFiliere, value: option.id }))} onChange={handleChange} placeholder="Sélectionner une option filière" className="formInput" />
+                            <Dropdown id='option_filieres_id' name='option_filieres_id'
+                             value={formValues.option_filieres_id} 
+                             options={filiereOptions.map(option => ({ label: option.libelleOptionFiliere, value: option.id }))} 
+                             onChange={handleChange} placeholder="Sélectionner une option filière" className="formInput" />
                         </div>
                         <div className="maindiv2">
                             <label htmlFor='semestreModule' className="label">Semestre Module</label>
