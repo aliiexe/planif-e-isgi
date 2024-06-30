@@ -11,6 +11,7 @@ import Filiere from './components/Filiere/Filiere';
 import OptionFiliere from './components/Filiere/OptionFiliere';
 import Module from './components/Module/Module';
 import Affectation from './components/Affectation/Affectation';
+import Importation from './components/Importation/Importation';
 
 
 
@@ -22,6 +23,7 @@ function App() {
         <Sidebar/>
         <div className="content">
           <Routes>
+          <Route path="/importation" element={<Importation />} />
             <Route path="/formateurs" element={<Formateur />} />
             <Route path='/groupes' element={<Groupe/>}></Route>
             <Route path='/filieres' element={<Filiere/>}></Route>

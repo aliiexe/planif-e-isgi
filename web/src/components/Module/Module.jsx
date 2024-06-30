@@ -39,18 +39,34 @@ export default function ModuleController() {
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [filiereOptions, setFiliereOptions] = useState([]);
 
-    useEffect(() => {
-        axiosClient.get('/sanctum/csrf-cookie');
-        loadModules();
-        loadFiliereOptions();
-    }, []);
+   // ... code existant ...
 
-    const loadModules = () => {
-        axiosClient.get('/modules').then((response) => {
-            setModules(response.data);
-            setLoading(false);
+useEffect(() => {
+    axiosClient.get('/sanctum/csrf-cookie');
+    loadFiliereOptions();
+}, []);
+
+useEffect(() => {
+    if (filiereOptions.length > 0) {
+        loadModules();
+    }
+}, [filiereOptions]);
+
+const loadModules = () => {
+    axiosClient.get('/modules').then((response) => {
+        const modulesWithLibelle = response.data.map(module => {
+            const filiere = filiereOptions.find(option => option.id === module.option_filieres_id);
+            return {
+                ...module,
+                libelleOptionFiliere: filiere ? filiere.libelleOptionFiliere : 'N/A'
+            };
         });
-    };
+        setModules(modulesWithLibelle);
+        setLoading(false);
+    });
+};
+
+// ... code existant ...
 
     const loadFiliereOptions = () => {
         axiosClient.get('/option-filieres').then((response) => {
@@ -259,7 +275,7 @@ export default function ModuleController() {
                             <input type="checkbox" id='EFM_Regional' name='EFM_Regional' checked={editModule ? editModule.EFM_Regional : false} onChange={(e) => handleChange(e, true)} className="formInput" />
                         </div>
                         <div className="maindiv2">
-                            <label htmlFor='option_filieres_id' className="label">Option Filieres ID</label>
+                            <label htmlFor='option_filieres_id' className="label">Option Filieres </label>
                             <Dropdown id='option_filieres_id' name='option_filieres_id' value={editModule ? editModule.option_filieres_id : ''} options={filiereOptions.map(option => ({ label: option.libelleOptionFiliere, value: option.id }))} onChange={(e) => handleChange(e, true)} placeholder="Sélectionner une option filière" className="formInput" />
                         </div>
                         <div className="maindiv2">
@@ -272,20 +288,21 @@ export default function ModuleController() {
                 </Dialog>
             </div>
             <div className="card">
-                <DataTable value={modules} paginator rows={10} rowsPerPageOptions={[5, 10, 25]} header={header} globalFilter={globalFilterValue} loading={loading} emptyMessage="Aucun module trouvé." selectionMode="checkbox" selection={selectedModules} onSelectionChange={(e) => setSelectedModules(e.value)}>
-                    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-                    <Column field="codeModule" header="Code Module"></Column>
-                    <Column field="libelleModule" header="Libellé Module"></Column>
-                    <Column field="ordreModule" header="Ordre Module"></Column>
-                    <Column field="MHT" header="MHT"></Column>
-                    <Column field="Coef" header="Coef"></Column>
-                    <Column field="EFM_Regional" header="EFM Regional" body={(rowData) => rowData.EFM_Regional ? 'Oui' : 'Non'}></Column>
-                    <Column field="option_filieres_id" header="Option Filieres ID"></Column>
-                    <Column field="semestreModule" header="Semestre Module"></Column>
-                </DataTable>
+            <DataTable value={modules} paginator rows={10} rowsPerPageOptions={[5, 10, 25]} header={header} globalFilter={globalFilterValue} loading={loading} emptyMessage="Aucun module trouvé." selectionMode="checkbox" selection={selectedModules} onSelectionChange={(e) => setSelectedModules(e.value)}>
+    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+    <Column field="codeModule" header="Code Module"></Column>
+    <Column field="libelleModule" header="Libellé Module"></Column>
+    <Column field="ordreModule" header="Ordre Module"></Column>
+    <Column field="MHT" header="MHT"></Column>
+    <Column field="Coef" header="Coef"></Column>
+    <Column field="EFM_Regional" header="EFM Regional" body={(rowData) => rowData.EFM_Regional ? 'Oui' : 'Non'}></Column>
+    <Column field="libelleOptionFiliere" header="Libellé Option Filière"></Column>
+    <Column field="semestreModule" header="Semestre Module"></Column>
+</DataTable>
             </div>
             <Toast ref={toast} />
             <ConfirmDialog />
+
         </>
     );
 }
