@@ -326,6 +326,7 @@ axiosClient.post("/countaffect",{matricule:matricule}).then((a)=>console.log(a.d
                     <Column sortable style={{ minWidth: '15rem' }} field="formateur.prenom" header="prenom formateur"></Column>
                     <Column sortable style={{ minWidth: '15rem' }} field="groupe.libelleGroupe" header="libelle groupe"></Column>
                     <Column sortable style={{ minWidth: '15rem' }} field="module.libelleModule" header="ID Option Filiere"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="heureSemaine" header="heure d'affectation par semaine"></Column>
                 </DataTable>
            
                 <Toast ref={toast}/>

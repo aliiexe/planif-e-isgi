@@ -19,6 +19,7 @@ class affectation_formodgr extends Model
         'dateEFMPre',
         'dateEFMReal',
         'matriculeprof',
+        'heureSemaine'
     ];
     public function formateur(){
      return $this->belongsTo(Formateur::class,'matriculeprof'); 
