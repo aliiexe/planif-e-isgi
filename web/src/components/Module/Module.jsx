@@ -100,7 +100,8 @@ const loadModules = () => {
 
     const handleEdit = async (e) => {
         e.preventDefault();
-        await axiosClient.put(`/modules/${editModule.id}`, editModule).then(() => {
+        try {
+            await axiosClient.put(`/modules/${editModule.id}`, editModule);
             setEditVisible(false);
             toast.current.show({
                 severity: 'success',
@@ -109,7 +110,13 @@ const loadModules = () => {
             });
             loadModules();
             setSelectedModules([]);
-        });
+        } catch (error) {
+            if (error.response && error.response.data.message === "The code module has already been taken.") {
+                setError("Le code module est déjà utilisé.");
+            } else {
+                setError("Une erreur s'est produite lors de la modification du module.");
+            }
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -131,7 +138,6 @@ const loadModules = () => {
             ordreModule,
             MHT,
             Coef,
-            // Assurez-vous que la valeur de EFM_Regional est un booléen
             EFM_Regional: JSON.parse(EFM_Regional),
             option_filieres_id,
             semestreModule,
@@ -147,7 +153,11 @@ const loadModules = () => {
             });
             loadModules();
         } catch (error) {
-            setError('Une erreur s\'est produite lors de l\'insertion du module.');
+            if (error.response && error.response.data.message === "The code module has already been taken.") {
+                setError("Le code module est déjà utilisé.");
+            } else {
+                setError("Une erreur s'est produite lors de l'insertion du module.");
+            }
         }
     };
 
@@ -239,8 +249,8 @@ const loadModules = () => {
                         <div className="maindiv2">
                             <label htmlFor='option_filieres_id' className="label">Option Filieres ID</label>
                             <Dropdown id='option_filieres_id' name='option_filieres_id'
-                             value={formValues.option_filieres_id} 
-                             options={filiereOptions.map(option => ({ label: option.libelleOptionFiliere, value: option.id }))} 
+                             value={formValues.option_filieres_id}
+                             options={filiereOptions.map(option => ({ label: option.libelleOptionFiliere, value: option.id }))}
                              onChange={handleChange} placeholder="Sélectionner une option filière" className="formInput" />
                         </div>
                         <div className="maindiv2">

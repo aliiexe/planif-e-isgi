@@ -28,7 +28,7 @@ class ModuleController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'codeModule' => 'required|string|unique:modules,codeModule',
+            'codeModule' => 'required|string',
             'libelleModule' => 'required|string|max:100',
             'ordreModule' => 'required|integer',
             'MHT' => 'required|numeric',
@@ -66,7 +66,7 @@ class ModuleController extends Controller
         $module = Module::findOrFail($id);
 
         $validatedData = $request->validate([
-            'codeModule' => ['required', 'string', Rule::unique('modules')->ignore($module->id)],
+            'codeModule' => 'required|string',
             'libelleModule' => 'required|string|max:100',
             'ordreModule' => 'required|integer',
             'MHT' => 'required|numeric',
