@@ -112,3 +112,12 @@
   display: flex;
   justify-content: space-between;
 }
+
+.radio-container {
+    display: flex;
+    align-items: center;
+}
+
+.radio-container label {
+    margin-right: 10px; /* Adjust the spacing as needed */
+}
