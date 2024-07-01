@@ -92,9 +92,14 @@ class AffectationFormodgrController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         $affectation = affectation_formodgr::find($id);
+        // $heureprof=$formateur->MasseHoaraireHebinit;
+        // $countaffec=affectation_formodgr::where('matriculeprof',$request->matriculeprof)
+        //     ->where('idModule',$request->idModule)->count()+1;
+        //     $heure = round($heureprof / $countaffec* 2) / 2;                                                                                                                                                        affectation_formodgr::where('matriculeprof',$request->matriculeprof)
+        //     ->where('idModule',$request->idModule)->update(["heureSemaine"=>$heure]);
         $affectation->delete();
         return response()->json("affectation supprimée avec succès");
     }

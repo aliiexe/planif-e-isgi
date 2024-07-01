@@ -72,6 +72,13 @@ export default function Parametres() {
                     </div>
                     <div className="flex-auto">
                         <FloatLabel>
+                            <Calendar showIcon name="dateDebutAnneeFormation" value={anneeformation.dateDebutAnneeFormation} onChange={(e) => handleDateChange('dateDebutAnneeFormation', e.value)} />
+                            <label>Date début 2eme semestre</label>
+                        </FloatLabel>
+                        <br /><br />
+                    </div>
+                    <div className="flex-auto">
+                        <FloatLabel>
                             <Calendar showIcon name="dateFinAnneeFormation" value={anneeformation.dateFinAnneeFormation} onChange={(e) => handleDateChange('dateFinAnneeFormation', e.value)} />
                             <label>Date fin de l&apos;année</label>
                         </FloatLabel>
