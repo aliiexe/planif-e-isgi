@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use DateInterval;
+use App\Models\Module;
 use App\Models\prevision;
+
 use Illuminate\Http\Request;
 use App\Models\AnneeFormation;
-use App\Models\affectation_formodgr;
 use App\Models\groupe_physique;
-use App\Models\Module;
-use DateInterval;
-use DateTime;
+use Illuminate\Support\Facades\DB;
+use App\Models\affectation_formodgr;
 
-class PrevisionController extends Controller
+class previsionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -55,23 +57,32 @@ class PrevisionController extends Controller
                     $ordreModule = $module->ordreModule;
                     $NbrSeanceSemaine = $MHTmodule / $heuresSemaine;
                     $dateDebutModule = $dateDebutFirstModule;
-                    $dateDebutModule->modify('+' . ($NbrSeanceSemaine * 7) . ' days');
-                    $dateDebutModule = $dateDebutModule->format('Y-m-d');
-
-                    $dateFinModule = new DateTime($dateDebutModule);
-                    $dateFinModule->modify('+' . ($NbrSeanceSemaine * 7) . ' days');
-                    $dateFinModule = $dateFinModule->format('Y-m-d');
-
-                    $dateCC1 = new DateTime($dateDebutModule);
-                    prevision::create([
+                    $NbrSeanceSemaine = $MHTmodule / $heuresSemaine;
+                    $dateDebutModule = $dateDebutFirstModule;
+                    $dateFinModule =$dateDebutModule;
+                    $dateCC1 = $dateDebutModule;
+                    $prevision=new prevision([
                         "affectationid" => $id,
-                        "datedebutmodule" => $dateDebutModule,
-                        "datefinmodule" => $dateFinModule
+                   
                     ]);
+                    $prevision->save();
+              // Import DB facade if not already imported
+
+                    $prevision1=prevision::find($prevision->id);
+                    $prevision1->update([
+                        "datedebutmodule" => $dateDebutFirstModule,
+                        "datefinmodule" => DB::raw("DATE_ADD('$dateFinModule', INTERVAL $NbrSeanceSemaine WEEK)")
+                    ]);
+                    
                     $heure = 0;
                     while ($heure <= 25) {
+                        if(prevision::where('affectationid', $id)->whereNull("datecc1")){
+                            prevision::where('affectationid', $id)->update([
+                                'datecc1' => DB::raw("$dateDebutModule")
+                            ]);
+                        }
                         prevision::where('affectationid', $id)->update([
-                            "datecc1" => $dateCC1."+ interval 1 week"
+                            'datecc1' => DB::raw("DATE_ADD(datecc2, INTERVAL 1 WEEK)")
                         ]);
                         $heure += $affect->heureAffectationParSemaine;
                     }
@@ -79,28 +90,31 @@ class PrevisionController extends Controller
                     $dateCC2 = new DateTime($dateCC1);
                     $heure = 0;
                     while ($heure <= 25) {
-                         prevision::where('affectationid', $id)->update([
-                            "datecc2" => $dateCC1."+ interval 1 week"
+                        if(prevision::where('affectationid', $id)->whereNull("datecc2")){
+                            prevision::where('affectationid', $id)->update([
+                                'datecc1' => DB::raw("datecc1")
+                            ]);
+                        }
+                        prevision::where('affectationid', $id)->update([
+                            'datecc1' => DB::raw("DATE_ADD(datecc2, INTERVAL 1 WEEK)")
                         ]);
                         $heure += $affect->heureAffectationParSemaine;
                     }
                     $dateCC2 = $dateCC2->format('Y-m-d');
                     $dateCC3 = new DateTime($dateCC2);
-                    if ($dateCC3 <= new DateTime($dateFinModule)) {
+                    if ($dateCC3 <= $dateFinModule) {
                         $heure = 0;
-                        while ($heure <= 25) {
-                             prevision::where('affectationid', $id)->update([
-                            "datecc3" => $dateCC2."+ interval 1 week"
-                        ]);
-                            $heure += $affect->heureAffectationParSemaine;
+                        if(prevision::where('affectationid', $id)->whereNull("datecc3")){
+                            prevision::where('affectationid', $id)->update([
+                                'datecc1' => DB::raw("datecc2")
+                            ]);
                         }
+                        prevision::where('affectationid', $id)->update([
+                            'datecc1' => DB::raw("DATE_ADD(datecc3, INTERVAL 1 WEEK)")
+                        ]);
+                        $heure += $affect->heureAffectationParSemaine;
                     }
-                    $dateCC3 = $dateCC3->format('Y-m-d');
-                    
-                    $dateEFM = new DateTime($dateCC3);
-                    $dateEFM->modify('+' . $NbrSeanceSemaine . ' weeks');
-                    $dateEFM = $dateEFM->format('Y-m-d');
-                    
+              
                     $dateDebutFirstModule = $dateFinModule;
                 }
                 $var++;

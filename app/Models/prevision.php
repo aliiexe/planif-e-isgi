@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\affectation_formodgr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class Prevision extends Model
+class prevision extends Model
 {
     use HasFactory;
     protected $fillable=[
