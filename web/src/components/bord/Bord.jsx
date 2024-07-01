@@ -72,7 +72,7 @@ setLoading(false)
   return (
     <>
       <div className="card flex justify-content-center">
-      
+      <h1>Tableau de bord</h1>
         <div className="container">
           <DataTable
             value={count}
@@ -89,8 +89,6 @@ setLoading(false)
             loading={loading}
             globalFilter={globalFilterValue}
             globalFilterFields={['id',"matricule"]}
-            selectionMode="multiple"
-            selection={selectedFiliere}
             onSelectionChange={(e) => setSelectedFiliere(e.value)}>
             <Column sortable style={{ minWidth: '15rem' }} field="matricule" header="matricule formateur"></Column>
             <Column sortable style={{ minWidth: '15rem' }} field="nom" header="nom formateur"></Column>

@@ -166,9 +166,9 @@ axiosClient.get('/affectation').then((a)=>setAffectations(a.data))
                   {selectedAffectations && selectedAffectations.length > 0 && (
                     <Button icon="pi pi-times" onClick={handleDelete} severity="danger" aria-label="Cancel" />
                   )}
-                  {selectedAffectations && selectedAffectations.length === 1 && (
+                  {/* {selectedAffectations && selectedAffectations.length === 1 && (
                     <Button icon="pi pi-pencil" onClick={() => { console.log(selectedAffectations);setEditAffectation(selectedAffectations[0])
-                    ; setEditVisible(true) }} severity="warning" aria-label="Notification" />)}
+                    ; setEditVisible(true) }} severity="warning" aria-label="Notification" />)} */}
                 </div>
                 <IconField iconPosition="left">
                     <InputIcon className="pi pi-search" />
