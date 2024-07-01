@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('previsions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("affecationid");
+            $table->unsignedBigInteger("affectationid");
             $table->foreign('affectationid')->references('id')->on('affectations_FORMODGR')->onDelete('cascade')
             ->onUpdate('cascade');
             $table->date("datedebutmodule")->nullable();
