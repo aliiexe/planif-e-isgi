@@ -6,6 +6,7 @@ import './Parametres.css';
 import { axiosClient } from "../../api/axiosClient";
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
+import Importation from "../Importation/Importation";
 
 export default function Parametres() {
     const [anneeformation, setAnneeformation] = useState({
@@ -81,6 +82,7 @@ export default function Parametres() {
                 </div>
             </form>
             <Toast ref={toast} />
+            <Importation />
         </div>
     );
 }
