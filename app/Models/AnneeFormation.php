@@ -13,5 +13,6 @@ class AnneeFormation extends Model
         'anneeFormation',
         'dateDebutAnneeFormation',
         'dateFinAnneeFormation',
+        'dateDebut2Semestre'
     ];
 }

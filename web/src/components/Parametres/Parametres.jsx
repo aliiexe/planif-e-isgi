@@ -11,7 +11,8 @@ export default function Parametres() {
     const [anneeformation, setAnneeformation] = useState({
         anneeFormation: '',
         dateDebutAnneeFormation: null,
-        dateFinAnneeFormation: null
+        dateFinAnneeFormation: null,
+        dateDebut2Semestre: null
     });
 
     const toast = useRef(null);
@@ -31,11 +32,21 @@ export default function Parametres() {
         });
     }
 
+    const resetForm = () => {
+        setAnneeformation({
+            anneeFormation: '',
+            dateDebutAnneeFormation: null,
+            dateFinAnneeFormation: null,
+            dateDebut2Semestre: null
+        });
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         axiosClient.post('/anneeformation', anneeformation).then((a) => {
             console.log(a);
             toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Paramètres enregistrés', life: 3000 });
+            resetForm();
         }).catch((error) => {
             console.log(error);
         });
@@ -58,7 +69,7 @@ export default function Parametres() {
                 <div className="input-rows">
                     <div>
                         <FloatLabel>
-                            <InputText id="anneeformation" name="anneeFormation" value={anneeformation.anneeformation} onChange={handleChange} />
+                            <InputText id="anneeformation" name="anneeFormation" value={anneeformation.anneeFormation} onChange={handleChange} />
                             <label>Année de formation</label>
                         </FloatLabel>
                         <br /><br />
@@ -72,7 +83,7 @@ export default function Parametres() {
                     </div>
                     <div className="flex-auto">
                         <FloatLabel>
-                            <Calendar showIcon name="dateDebutAnneeFormation" value={anneeformation.dateDebutAnneeFormation} onChange={(e) => handleDateChange('dateDebutAnneeFormation', e.value)} />
+                            <Calendar showIcon name="dateDebut2Semestre" value={anneeformation.dateDebut2Semestre} onChange={(e) => handleDateChange('dateDebut2Semestre', e.value)} />
                             <label>Date début 2eme semestre</label>
                         </FloatLabel>
                         <br /><br />
