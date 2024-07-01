@@ -32,10 +32,12 @@ class AnneeFormationController extends Controller
 
         $dateDebut = new \DateTime($request->dateDebutAnneeFormation);
         $dateFin = new \DateTime($request->dateFinAnneeFormation);
+        $dateDebut2Semestre = new \DateTime($request->dateDebut2Semestre);
 
         $anneeFormation->anneeFormation = $request->anneeFormation;
         $anneeFormation->dateDebutAnneeFormation = $dateDebut->format('Y-m-d H:i:s');
         $anneeFormation->dateFinAnneeFormation = $dateFin->format('Y-m-d H:i:s');
+        $anneeFormation->dateDebut2Semestre = $dateDebut2Semestre->format('Y-m-d H:i:s');
         $anneeFormation->save();
         return response()->json($anneeFormation);
     }
