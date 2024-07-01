@@ -9,13 +9,10 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
-import { SelectButton } from 'primereact/selectbutton';
-
+import '../Formateur/Formateur.css'
 
 import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
 import { confirmDialog } from 'primereact/confirmdialog'; // For confirmDialog method
-        
-
 
 export default function Affectation() {
     const [visible, setVisible] = useState(false);
@@ -43,10 +40,7 @@ export default function Affectation() {
     
     const handleChange = (e, isEdit = false) => {
         if(e.target.name=="matriculeprof" || e.target.name=="idModule"){
-
-        
                 console.log(Affectations)
-
                 console.log(e.target.value)
                 let toremove=[]
                 if(e.target.name=="matriculeprof"){
@@ -59,10 +53,7 @@ export default function Affectation() {
                     !toremove.some(affectation => affectation.idGroupePhysique == group.id)
                   );
               
-                setgroupesel(test)
-     
-        
-      
+                setgroupesel(test)      
         }
         const value = e.target.type === 'radio' ? (e.target.checked ? e.target.value : '') : e.target.value;
         if (isEdit) {
@@ -94,7 +85,6 @@ export default function Affectation() {
             });
             load()
         });
-  
     };
 
     const handleSubmit = async (e) => {
@@ -310,7 +300,7 @@ axiosClient.post("/countaffect",{matricule:matricule}).then((a)=>console.log(a.d
                     scrollHeight="64vh"
                     sortMode="multiple"
                     tableStyle={{ minWidth: '50rem' }}
-                    className='AffectationsTable'
+                    className='formateursTable'
                     emptyMessage="Pas de Affectations trouvés."
                     header={header}
                     globalFilter={globalFilterValue}

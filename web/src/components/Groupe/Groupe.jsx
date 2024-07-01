@@ -10,7 +10,8 @@ import { InputText } from 'primereact/inputtext';
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
 import { SelectButton } from 'primereact/selectbutton';
-import { Dropdown } from 'primereact/dropdown';
+import '../Formateur/Formateur.css'
+
 
 import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
 import { confirmDialog } from 'primereact/confirmdialog'; // For confirmDialog method
@@ -215,10 +216,8 @@ console.log(a.data)
         })
     },[donnes])
 
-
     return (
         <>
-
             <div className="card flex justify-content-center">
                 <Button label=" Ajouter un groupe" icon="pi pi-plus" onClick={() => setVisible(true)}/>
                 
@@ -226,9 +225,7 @@ console.log(a.data)
                     <br></br>
             <SelectButton optionLabel="name" value={donnes} onChange={(e) => {setdonnes(e.target.value);setSelectedgroupes(null)}}  options={[
                   { name: 'presentiel', value:"presentiel"},
-        { name: 'distanciel', value: "distanciel" },
-      
-  
+        { name: 'distanciel', value: "distanciel" }
     ]} />
         </div>
         <br></br>
@@ -337,19 +334,17 @@ console.log(a.data)
     </div>
 </Dialog>
 
-
-   
     {donnes === "presentiel" ? (
                 <DataTable
                     value={groupes}
                     paginator
                     rows={10}
-                    dataKey="codeGroupePR"
+                    dataKey="id"
                     scrollable
                     scrollHeight="64vh"
                     sortMode="multiple"
                     tableStyle={{ minWidth: '50rem' }}
-                    className='groupesTable'
+                    className='formateursTable'
                     emptyMessage="Pas de groupes trouvés."
                     header={header}
                     loading={loading}
@@ -370,7 +365,7 @@ console.log(a.data)
                     value={groupes}
                     paginator
                     rows={10}
-                    dataKey="codeGroupeDS"
+                    dataKey="id"
                     scrollable
                     scrollHeight="64vh"
                     sortMode="multiple"

@@ -10,6 +10,8 @@ import { InputText } from 'primereact/inputtext';
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
 import { Dropdown } from 'primereact/dropdown';
+import '../Formateur/Formateur.css'
+
 
 
 import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
@@ -228,7 +230,19 @@ export default function OptionFiliere() {
                 </Dialog>
             </div>
             <div className="card">
-                <DataTable value={optionFilieres} paginator rows={10} rowsPerPageOptions={[5, 10, 25]} header={header} globalFilter={globalFilterValue} loading={loading} emptyMessage="Aucune option filière trouvée." selectionMode="checkbox" selection={selectedOptionFilieres} onSelectionChange={(e) => setSelectedOptionFilieres(e.value)}>
+                <DataTable 
+                value={optionFilieres} 
+                paginator 
+                rows={10} 
+                rowsPerPageOptions={[5, 10, 25]} 
+                header={header} 
+                globalFilter={globalFilterValue} 
+                loading={loading} 
+                emptyMessage="Aucune option filière trouvée." 
+                selectionMode="checkbox"
+                className='formateursTable'
+                selection={selectedOptionFilieres}
+                onSelectionChange={(e) => setSelectedOptionFilieres(e.value)}>
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
                     <Column field="codeOptionFiliere" header="Code Option Filière"></Column>
                     <Column field="libelleOptionFiliere" header="Libellé Option Filière"></Column>

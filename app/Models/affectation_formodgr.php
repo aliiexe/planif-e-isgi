@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Module;
 use App\Models\Formateur;
-use App\Models\prevision;
+use App\Models\Prevision;
 use App\Models\groupe_physique;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,13 +25,16 @@ class affectation_formodgr extends Model
     public function formateur(){
      return $this->belongsTo(Formateur::class,'matriculeprof'); 
     }
+
     public function module(){
-        return $this->belongsTo(Module::class,'idModule'); 
-       }
-       public function groupe(){
-        return $this->belongsTo(groupe_physique::class,'idGroupePhysique'); 
-       }
-       public function prevision(){
-        return $this->hasOne(prevision::class,"affectationid");
-       }
+     return $this->belongsTo(Module::class,'idModule'); 
+    }
+
+    public function groupe(){
+     return $this->belongsTo(groupe_physique::class,'idGroupePhysique'); 
+    }
+
+    public function prevision(){
+     return $this->hasOne(Prevision::class,"affectationid");
+    }
 }

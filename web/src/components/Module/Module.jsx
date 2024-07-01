@@ -10,7 +10,7 @@ import { InputText } from 'primereact/inputtext';
 import { InputIcon } from 'primereact/inputicon';
 import { IconField } from 'primereact/iconfield';
 import { Dropdown } from 'primereact/dropdown';
-
+import '../Formateur/Formateur.css'
 
 import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
 import { confirmDialog } from 'primereact/confirmdialog'; // For confirmDialog method
@@ -301,17 +301,29 @@ const loadModules = () => {
                 </Dialog>
             </div>
             <div className="card">
-            <DataTable value={modules} paginator rows={10} rowsPerPageOptions={[5, 10, 25]} header={header} globalFilter={globalFilterValue} loading={loading} emptyMessage="Aucun module trouvé." selectionMode="checkbox" selection={selectedModules} onSelectionChange={(e) => setSelectedModules(e.value)}>
-    <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
-    <Column field="codeModule" header="Code Module"></Column>
-    <Column field="libelleModule" header="Libellé Module"></Column>
-    <Column field="ordreModule" header="Ordre Module"></Column>
-    <Column field="MHT" header="MHT"></Column>
-    <Column field="Coef" header="Coef"></Column>
-    <Column field="EFM_Regional" header="EFM Regional" body={(rowData) => rowData.EFM_Regional ? 'Oui' : 'Non'}></Column>
-    <Column field="libelleOptionFiliere" header="Libellé Option Filière"></Column>
-    <Column field="semestreModule" header="Semestre Module"></Column>
-</DataTable>
+            <DataTable 
+            value={modules} 
+            paginator 
+            rows={10} 
+            rowsPerPageOptions={[5, 10, 25]} 
+            header={header} 
+            className='formateursTable'
+            globalFilter={globalFilterValue} 
+            loading={loading} 
+            emptyMessage="Aucun module trouvé." 
+            selectionMode="checkbox" 
+            selection={selectedModules} 
+            onSelectionChange={(e) => setSelectedModules(e.value)}>
+                <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
+                <Column field="codeModule" header="Code Module"></Column>
+                <Column field="libelleModule" header="Libellé Module"></Column>
+                <Column field="ordreModule" header="Ordre Module"></Column>
+                <Column field="MHT" header="MHT"></Column>
+                <Column field="Coef" header="Coef"></Column>
+                <Column field="EFM_Regional" header="EFM Regional" body={(rowData) => rowData.EFM_Regional ? 'Oui' : '-'}></Column>
+                <Column field="libelleOptionFiliere" header="Libellé Option Filière"></Column>
+                <Column field="semestreModule" header="Semestre Module"></Column>
+            </DataTable>
             </div>
             <Toast ref={toast} />
             <ConfirmDialog />

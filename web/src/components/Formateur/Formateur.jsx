@@ -12,10 +12,8 @@ import { IconField } from 'primereact/iconfield';
 import CreateFormateur from './CreateFormateur';
 import EditFormateur from './EditFormateur';
 
-import { ConfirmDialog } from 'primereact/confirmdialog'; // For <ConfirmDialog /> component
-import { confirmDialog } from 'primereact/confirmdialog'; // For confirmDialog method
-        
-
+import { ConfirmDialog } from 'primereact/confirmdialog';
+import { confirmDialog } from 'primereact/confirmdialog';
 
 export default function Formateur() {
     const [visible, setVisible] = useState(false);

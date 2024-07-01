@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\prevision;
+use App\Models\Prevision;
 use Illuminate\Http\Request;
 use App\Models\AnneeFormation;
 use App\Models\affectation_formodgr;
 use App\Models\groupe_physique;
 use App\Models\Module;
-use DateInterval;
 use DateTime;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +18,7 @@ class PrevisionController extends Controller
      */
     public function index()
     {
-        return response()->json(prevision::all());
+        return response()->json(Prevision::with('affectation','affectation.module','affectation.groupe','affectation.formateur')->get());
     }
 
     /**

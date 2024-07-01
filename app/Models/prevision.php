@@ -17,8 +17,9 @@ class Prevision extends Model
         "datecc3",
         "dateefm"
     ];
-public function affectation(){
-    return $this->belongsTo(affectation_formodgr::class,"affectationid");
-}
+        
+    public function affectation(){
+        return $this->belongsTo(affectation_formodgr::class,"affectationid");
+    }
 
 }
