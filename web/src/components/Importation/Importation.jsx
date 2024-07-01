@@ -15,7 +15,7 @@ const labelsTitle = [
 ];
 
 const Importation = () => {
-  const [files, setFiles] = useState(Array(11).fill(null));
+  const [files, setFiles] = useState(Array(6).fill(null));
 
   const handleFileChange = (e, index) => {
     const newFiles = [...files];
@@ -32,27 +32,27 @@ const Importation = () => {
       'importetab',
       'importform',
       'importmod',
-
     ];
 
     try {
-      for (let index = 0; index < files.length; index++) {
-        const file = files[index];
+      const uploadPromises = files.map((file, index) => {
         if (file) {
           const formData = new FormData();
           formData.append('file', file);
-
-          const response = await axiosClient.post(`/${routes[index]}`, formData);
-
-          if (response.status === 200) {
-            console.log(`${labelsTitle[index]} uploaded successfully to ${routes[index]}`);
-          } else {
-            console.error(`Failed to upload file ${index + 1} to ${routes[index]}`);
-            return; // Exit the function if upload fails
-          }
+          return axiosClient.post(`/${routes[index]}`, formData)
+            .then(response => {
+              if (response.status === 200) {
+                console.log(`${labelsTitle[index]} uploaded successfully to ${routes[index]}`);
+              } else {
+                console.error(`Failed to upload file ${index + 1} to ${routes[index]}`);
+                throw new Error(`Failed to upload file ${index + 1}`);
+              }
+            });
         }
-      }
+        return Promise.resolve();
+      });
 
+      await Promise.all(uploadPromises);
       console.log('All files processed');
     } catch (error) {
       console.error('Error uploading files:', error);
