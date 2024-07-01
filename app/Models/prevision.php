@@ -5,9 +5,10 @@ namespace App\Models;
 use App\Models\affectation_formodgr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-class prevision extends Model
+class Prevision extends Model
 {
     use HasFactory;
+    protected $table="previsions";
     protected $fillable=[
         "affectationid",
         "datedebutmodule",

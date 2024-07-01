@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use DateTime;
-use DateTime;
+
 use DateInterval;
-use DateInterval;
+
 use App\Models\Module;
-use App\Models\Module;
+
 use App\Models\prevision;
 use Illuminate\Http\Request;
 use App\Models\AnneeFormation;
@@ -124,7 +124,7 @@ class previsionController extends Controller
         $heuresSemaine = $affect->heureSemaine;
         $dateDebutAnnee = new DateTime($annee->dateDebutAnneeFormation);
         $dateDebutFirstModule = clone $dateDebutAnnee;
-        $var = 2;
+        $var = 1;
 
         while ($var < $maxOrdreModule) {
             $modulesArray = $affect->module()->where('ordreModule', $var)->orderBy('MHT', 'ASC')->get();
@@ -149,7 +149,7 @@ class previsionController extends Controller
                 // Create prevision entry
                 prevision::create([
                     "affectationid" => $id,
-                    "datedebutmodule" => $dateDebutModule->format('Y-m-d'),
+                    "datedebutmodule" => $dateDebutFirstModule->format('Y-m-d'),
                     "datefinmodule" => $dateFinModule->format('Y-m-d')
                 ]);
 
