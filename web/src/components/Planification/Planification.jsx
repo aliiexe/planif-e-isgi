@@ -10,6 +10,13 @@ import { Column } from 'primereact/column';
 import '../Formateur/Formateur.css'
 
 export default function Planification() {
+    useEffect(()=>{
+        axiosClient.get('/groupe').then(a=>{
+            a.data.map(ele=>{
+                axiosClient.post('/prevision/',{idGroupePhysique: ele.id,anneeFormation: 20222023})
+            })
+        })
+    })
 //     const [randomDate, setRandomDate] = useState(null);
 //     const [weekNumber, setWeekNumber] = useState(null);
 //     const calculateWeekNumber = () => {
@@ -87,8 +94,7 @@ const [globalFilterValue, setGlobalFilterValue] = useState('');
     return (
         <>
         <h1>Planification</h1>
-        <label>id group phy</label>
-        <input type="text" onChange={(e)=>axiosClient.post('/prevision/',{idGroupePhysique: e.target.value.toString(),anneeFormation: 20222023}).then((a)=>console.log(a))} />
+       
         <div className="card flex justify-content-center">
             <DataTable
                         value={previsions}
