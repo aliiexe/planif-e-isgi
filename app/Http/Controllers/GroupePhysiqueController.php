@@ -38,7 +38,7 @@ class GroupePhysiqueController extends Controller
 
     public function choose(Request $request){
         if($request->type=="presentiel"){
-            return response()->json(groupe_physique::all());
+            return response()->json(groupe_physique::with("optionfilliere")->get());
         }else{
             return response()->json(groupe_distanciel::all());
         }

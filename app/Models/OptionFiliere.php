@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\groupe_physique;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OptionFiliere extends Model
 {
@@ -25,5 +25,8 @@ class OptionFiliere extends Model
     public function modules()
     {
         return $this->hasMany(Module::class);
+    }
+    public function groupes(){
+        return $this->hasMany(groupe_physique::class,"option_filieres_id");
     }
 }

@@ -357,8 +357,7 @@ console.log(a.data)
                     <Column selectionMode="multiple" headerStyle={{ width: '3rem' }}></Column>
                     <Column sortable style={{ minWidth: '15rem' }} field="libelleGroupe" header="Libelle Groupe Présentiel"></Column>
                     <Column sortable style={{ minWidth: '15rem' }} field="codeGroupePhysique" header="Code Groupe Présentiel"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="groupeCodeOptionFiliere" header="Code Option Filiere"></Column>
-                    <Column sortable style={{ minWidth: '15rem' }} field="option_filieres_id" header="ID Option Filiere"></Column>
+                    <Column sortable style={{ minWidth: '15rem' }} field="optionfilliere.codeOptionFiliere" header="Code Option Filiere"></Column>
                 </DataTable>
             ) : (
                 <DataTable
