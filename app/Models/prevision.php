@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Prevision extends Model
 {
     use HasFactory;
+    protected $table="previsions";
     protected $fillable=[
         "affectationid",
         "datedebutmodule",

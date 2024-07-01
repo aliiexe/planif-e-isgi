@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use DateInterval;
+
+use App\Models\Module;
+
 use App\Models\Prevision;
 use Illuminate\Http\Request;
 use App\Models\AnneeFormation;
-use App\Models\affectation_formodgr;
 use App\Models\groupe_physique;
-use App\Models\Module;
 use DateTime;
 use Illuminate\Support\Facades\Log;
+use App\Models\affectation_formodgr;
 
-class PrevisionController extends Controller
+class previsionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +38,13 @@ class PrevisionController extends Controller
 
 public function store(Request $request)
 {
-    $groupe = groupe_physique::where('id', $request->idGroupePhysique)->get();
+
+$groupe = groupe_physique::findOrFail($request->idGroupePhysique);
+
+$groupe->affectations()->each(function ($affectation) {
+    $affectation->prevision()->delete();
+});
+
     $affectation = affectation_formodgr::where('idGroupePhysique', $request->idGroupePhysique)->get();
     $annee = AnneeFormation::where('anneeFormation', $request->anneeFormation)->first();
     $maxOrdreModule = Module::max('ordreModule');
@@ -45,7 +54,7 @@ public function store(Request $request)
         $heuresSemaine = $affect->heureSemaine;
         $dateDebutAnnee = new DateTime($annee->dateDebutAnneeFormation);
         $dateDebutFirstModule = clone $dateDebutAnnee;
-        $var = 2;
+        $var = 1;
 
         // Initialize preceding module's dateFinModule
         $precedingDateFinModule = null;
