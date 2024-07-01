@@ -199,8 +199,10 @@ class PrevisionController extends Controller
                 Log::debug("ID: $id, dateCC2: " . $dateCC2->format('Y-m-d'));
                 Log::debug("ID: $id, dateCC3: " . $dateCC3->format('Y-m-d'));
                 Log::debug("ID: $id, dateEFM: " . $dateEFMFormatted);
+                
             }
             $var++;
+
         }
     }
 }
