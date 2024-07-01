@@ -14,6 +14,7 @@ import Affectation from './components/Affectation/Affectation';
 import Importation from './components/Importation/Importation';
 import Parametres from './components/Parametres/Parametres';
 import Planification from './components/Planification/Planification';
+import Bord from './components/bord/Bord';
 
 // import Side from './components/SideBar/Side';
 
@@ -36,6 +37,7 @@ function App() {
             <Route path='/affectation' element={<Affectation></Affectation>}></Route>
             <Route path='/prevision' element={<Planification></Planification>}></Route>
             <Route path='/parametres' element={<Parametres></Parametres>}></Route>
+            <Route path='/bord' element={<Bord></Bord>}></Route>
           </Routes>
         </div>
       </div>

@@ -85,6 +85,11 @@ class FormateurController extends Controller
     {
         //
     }
+    public function formateurcount()
+    {
+        $count=Formateur::withSum("affectations","heureSemaine")->get();
+        return response()->json($count);
+    }
 
     /**
      * Show the form for editing the specified resource.

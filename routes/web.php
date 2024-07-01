@@ -10,23 +10,23 @@ Route::get('/', function () {
 
 // require __DIR__.'/auth.php';
 use App\Http\Controllers\ModuleController;
-use App\Http\Controllers\ImportFiliereController;
-use App\Http\Controllers\OptionFiliereImportController;
-use App\Http\Controllers\ComplexeImportController;
-use App\Http\Controllers\ImportEtablissementController;
+use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\FormateurController;
+use App\Http\Controllers\PrevisionController;
 use App\Http\Controllers\ModuleImportController;
-use App\Http\Controllers\FormateurImportController; // Assurez-vous que cette ligne est présente
+use App\Http\Controllers\EtablissementController;
+use App\Http\Controllers\ImportFiliereController; // Assurez-vous que cette ligne est présente
  // Assurez-vous que cette ligne est présente
 
 
-use App\Http\Controllers\FiliereController;
-use App\Http\Controllers\FormateurController;
-use App\Http\Controllers\EtablissementController;
 use App\Http\Controllers\OptionFiliereController;
-use App\Http\Controllers\GroupePhysiqueController;
-use App\Http\Controllers\AffectationFormodgrController;
 use App\Http\Controllers\AnneeFormationController;
-use App\Http\Controllers\PrevisionController;
+use App\Http\Controllers\ComplexeImportController;
+use App\Http\Controllers\GroupePhysiqueController;
+use App\Http\Controllers\FormateurImportController;
+use App\Http\Controllers\AffectationFormodgrController;
+use App\Http\Controllers\ImportEtablissementController;
+use App\Http\Controllers\OptionFiliereImportController;
 
 Route::resource('etablissement',EtablissementController::class);
 Route::resource('groupe',GroupePhysiqueController::class);
@@ -47,4 +47,5 @@ Route::post('/importform', [FormateurImportController::class, 'import'])->name('
 Route::post('/countaffect',[FormateurController::class,'countaffect']);
 Route::resource('/prevision',PrevisionController::class);
 
-Route::resource('/anneeformation',AnneeFormationController::class); 
+Route::get('/formateurcount',[FormateurController::class,"formateurcount"]);
+Route::resource('/anneeformation',AnneeFormationController::class);
