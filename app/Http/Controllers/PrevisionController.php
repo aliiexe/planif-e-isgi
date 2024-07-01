@@ -39,7 +39,13 @@ class previsionController extends Controller
 
 public function store(Request $request)
 {
-    $groupe = groupe_physique::where('id', $request->idGroupePhysique)->get();
+
+$groupe = groupe_physique::findOrFail($request->idGroupePhysique);
+
+$groupe->affectations()->each(function ($affectation) {
+    $affectation->prevision()->delete();
+});
+
     $affectation = affectation_formodgr::where('idGroupePhysique', $request->idGroupePhysique)->get();
     $annee = AnneeFormation::where('anneeFormation', $request->anneeFormation)->first();
     $maxOrdreModule = Module::max('ordreModule');
